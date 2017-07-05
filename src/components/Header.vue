@@ -25,7 +25,7 @@ export default {
     logout() {
       this.$store.dispatch('logout')
         .then(() => {
-          this.$root.$children[0].message('"成功登出！');
+          this.$root.$children[0].message('成功登出！');
         })
         .catch(err => {
           this.$root.$children[0].message(err.message);

@@ -47,6 +47,11 @@ function check_router(page) {
       data: {
         title: "xxx 的博客"
       },
+      computed: {
+        state() {
+          return [this.$store.getters.logined, this.$store.getters.is_admin]
+        }
+      },
       methods: {
         update_title() {
           let meta_title = this.$store.state.route.meta.title;
@@ -60,7 +65,7 @@ function check_router(page) {
         (this as any).update_title();
         if (!check_router(store.state.route))
           router.replace('/');
-        store.watch(state => state.session.uid, () => {
+        this.$watch('state', () => {
           if (!check_router(store.state.route))
             router.push('/');
         });

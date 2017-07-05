@@ -45,17 +45,26 @@ const actions = {
   },
   async check_session({state, dispatch, commit}) {
     let uid = await dispatch('ajax', {action: 'check-session'});
-    if (uid && state.uid !== uid) {
+    if (state.uid !== uid) {
       commit('update_login', uid);
-      await dispatch('update_user', uid);
-      await dispatch('load_settings');
+      if (uid !== null) {
+        await dispatch('update_user', uid);
+        await dispatch('load_settings');
+      }
     }
   },
   async logout({state, dispatch, commit}) {
     if (state.uid === null)
       return;
-    await dispatch('ajax', {action: 'logout'});
-    commit('update_login', null);
+    try {
+      await dispatch('ajax', {action: 'logout'});
+      commit('update_login', null);
+    } catch (err) {
+      if (err.message === 'User already logout')
+        commit('update_login', null);
+      else
+        throw err;
+    }
   }
 };
 
