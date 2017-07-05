@@ -40,7 +40,7 @@ app.use(devMiddleware);
 app.use(hotMiddleware);
 app.use('/static', express.static('./static'));
 
-const uri = 'http://localhost:' + port;
+const uri = 'http://127.0.0.1:' + port;
 
 let _resolve, readyPromise = new Promise(resolve => {
   _resolve = resolve;
