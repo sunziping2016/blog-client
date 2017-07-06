@@ -18,11 +18,12 @@
   },
   "homepage": "https://github.com/sunziping2016/blog-client#readme",
   "dependencies": {
+    "cropperjs": "^1.0.0-rc.2",
     "lodash": "^4.17.4",
     "vue": "^2.3.4",
-    "vue-awesome": "^2.3.1",
     "vue-material": "^0.7.4",
     "vue-router": "^2.6.0",
+    "vue2-dropzone": "^2.3.4",
     "vuex": "^2.3.1",
     "vuex-router-sync": "^4.2.0",
     "whatwg-fetch": "^2.0.3"

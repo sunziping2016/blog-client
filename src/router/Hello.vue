@@ -1,12 +1,14 @@
 <template>
-  <h1>{{ msg }}</h1>
+  <page-content>
+    <h1>{{ msg }}</h1>
+  </page-content>
 </template>
 
 <script lang="ts">
 export default {
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: '博客'
     }
   }
 };

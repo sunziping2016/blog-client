@@ -18,7 +18,7 @@
     </md-dialog-content>
     <md-dialog-actions>
       <md-button class="md-primary" @click="close()">取消</md-button>
-      <md-button class="md-primary" @click="register()" :disabled="!valid">注册</md-button>
+      <md-button class="md-primary" @click="register()" :disabled="!valid">添加</md-button>
     </md-dialog-actions>
   </md-dialog>
 </template>

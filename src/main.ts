@@ -5,13 +5,13 @@ import store from './store/index';
 import { sync } from 'vuex-router-sync';
 import VueMaterial from 'vue-material';
 import 'vue-material/dist/vue-material.css';
-import 'vue-awesome/icons';
-import Icon from 'vue-awesome/components/Icon.vue';
+import Dropzone from 'vue2-dropzone';
+import 'cropperjs/dist/cropper.css';
 import components from './components';
 
 sync(store, router);
 Vue.use(VueMaterial);
-Vue.component('icon', Icon);
+Vue.component('dropzone', Dropzone);
 for (let k in components)
   Vue.component(k, components[k]);
 
