@@ -1,10 +1,9 @@
 <template>
-  <md-dialog ref="dialog">
+  <md-dialog ref="dialog" :md-fullscreen="true">
     <md-dialog-title>图片编辑</md-dialog-title>
-    <md-dialog-content>
+    <md-dialog-content class="editor-dialog-content">
       <div class="editor">
-        <div class="canvas" @dblclick="dblclick" ref="canvas">
-          <img ref="image" @load="start" class="cropper-hidden">
+        <div class="canvas" @dblclick="dblclick" ref="canvas" :style="size">
         </div>
         <div class="toolbar" v-if="cropper" @click="click">
           <button class="toolbar__button" data-action="move" title="Move (M)"><span class="fa fa-arrows"></span></button>
@@ -38,6 +37,9 @@
         data: null,
         cropped: false,
         cropping: false,
+        size: {
+
+        }
       };
     },
     mounted() {
@@ -48,16 +50,30 @@
       this.stop();
     },
     methods: {
-      open(url, aspect) {
-        this.$refs.dialog.open();
-        this.aspectRatio = aspect;
-        this.$refs.image.src = url;
+      open(url, options) {
+        if (options === undefined)
+          options = {};
+        while(this.$refs.canvas.hasChildNodes())
+          this.$refs.canvas.removeChild(this.$refs.canvas.lastChild);
+        this.size = {};
+        let image = new Image();
+        image.src = url;
+        image.style.visibility = 'hidden';
+        image.onload = () => {
+          this.$refs.dialog.open();
+          if (image.width < 320) {
+            image.style.width = `320px`;
+            this.size = {'max-width': `320px`};
+          } else
+            this.size = {'max-width': `${image.width}px`};
+          this.$refs.canvas.appendChild(image);
+          this.start(image, options);
+        };
       },
       close(status) {
         this.$refs.dialog.close();
-        this.$refs.image.src = undefined;
+        this.$emit('close', !!status && this.cropper.getCroppedCanvas({ fillColor: '#fff' }));
         stop();
-        this.$emit('close', !!status);
       },
       click({ target }) {
         const cropper = this.cropper;
@@ -178,15 +194,12 @@
           this.crop();
         }
       },
-      start() {
-        console.log('start');
+      start(image, options) {
         if (this.cropped) {
           return;
         }
-        this.cropper = new Cropper(this.$refs.image, {
-          autoCrop: false,
+        this.cropper = new Cropper(image, {
           dragMode: 'move',
-          aspectRatio: this.aspectRatio,
           background: false,
           ready: () => {
             if (this.data) {
@@ -204,6 +217,7 @@
             if (detail.width > 0 && detail.height > 0 && !this.cropping)
                 this.cropping = true;
           },
+          ...options
         });
       },
       stop() {
@@ -244,10 +258,20 @@
   }
 </script>
 
-<style scoped lang="scss">
-  .editor {
-    height: 100%;
+<style lang="scss">
+  .md-fullscreen {
+
+  }
+  .cropper-container {
+    margin-left: -100%;
+  }
+  .editor-dialog-content {
     overflow: hidden;
+  }
+  .editor {
+    overflow: hidden;
+    max-height: 100%;
+    max-width: 100%;
   }
   .canvas {
     align-items: center;
@@ -257,6 +281,9 @@
     & > img {
       max-height: 100%;
       max-width: 100%;
+      display: block!important;
+      visibility: hidden;
+      z-index: -1;
     }
   }
   .toolbar {

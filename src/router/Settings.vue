@@ -9,13 +9,12 @@
           <h4 class="item-label">头像</h4>
           <md-whiteframe md-elevation="1" class="item-data avatar-dropzone">
             <dropzone id="avatar-dropzone"
-                      :url="$store.state.api.site + '/file'"
+                      :url="$store.state.api.site + '/file/public/avatar.jpeg'"
                       :dropzone-options="avatar_dropzone"
                       :use-custom-dropzone-options="true"
                       :thumbnail-width="150" :thumbnail-height="150"
-                      @vdropzone-file-added="add_file(arguments[0])"
-                      @vdropzone-thumbnail="$refs.photo_editor.open(arguments[0].dataURL)"
-                      @vdropzone-removed-file="remove_file()"
+                      @vdropzone-thumbnail="file_ready(arguments[0])"
+                      @vdropzone-error="!arguments[0].sending && $refs.avatar_dropzone.removeFile(arguments[0])"
                       ref="avatar_dropzone">
             </dropzone>
           </md-whiteframe>
@@ -52,23 +51,50 @@
         maxNumberOfFiles: 1,
         maxFileSizeInMB: 5
       },
-      had_file: false,
-      avatar: null
+      avatar: null,
     }),
-    computed: {
-      accepted_file_type_list() {
-        return this.avatar_dropzone.acceptedFileTypes.split(',');
-      }
-    },
     methods: {
-      add_file(file) {
-        if (this.had_file || this.accepted_file_type_list.indexOf(file.type) === -1)
-          this.$refs.avatar_dropzone.removeFile(file);
-        else
-          this.had_file = true;
+      file_ready(file) {
+        if (!file.accepted)
+            return;
+        if (file.sending) {
+          this.$refs.avatar_dropzone.dropzone.processQueue();
+          return;
+        }
+        this.$refs.photo_editor.open(file.dataURL, {
+          viewMode: 2,
+          autoCrop: false,
+          aspectRatio: true,
+        });
+        this.$refs.photo_editor.$once('close', status => {
+          if (status === false) {
+            console.log('sending');
+            file.sending = true;
+            setTimeout(() => this.$refs.avatar_dropzone.dropzone.processQueue());
+          } else {
+            this.$refs.avatar_dropzone.removeFile(file);
+            const blob = this.dataURItoBlob(status.toDataURL('image/jpeg'));
+            blob.name = file.name;
+            blob.sending = 'edited';
+            this.$refs.avatar_dropzone.dropzone.addFile(blob);
+          }
+        })
       },
-      remove_file() {
-        this.had_file = false;
+      dataURItoBlob(dataURI) {
+        let byteString, mimestring;
+
+        if(dataURI.split(',')[0].indexOf('base64') !== -1 )
+          byteString = atob(dataURI.split(',')[1]);
+        else
+          byteString = decodeURI(dataURI.split(',')[1]);
+
+        mimestring = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+        let content = new Uint8Array(byteString.length);
+        for (let i = 0; i < byteString.length; i++) {
+          content[i] = byteString.charCodeAt(i)
+        }
+        return new Blob([content], {type: mimestring});
       }
     }
   };
@@ -113,6 +139,9 @@
         .dz-success-mark {
           opacity: 0;
         }
+      }
+      .dz-image img {
+        width: $preview-size;
       }
       .dz-progress {
         top: 60%;
