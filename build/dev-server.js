@@ -8,7 +8,16 @@ const proxyMiddleware = require('http-proxy-middleware');
 const webpackConfig = require('./webpack.dev.conf');
 
 const port = process.env.PORT || 19172;
-const proxyTable = [];
+const proxyOption = {
+  target: 'http://localhost:21894',
+  ws: true,
+  changeOrigin: true
+};
+const proxyTable = {
+  '/api': proxyOption,
+  '/file': proxyOption,
+  '/ws': proxyOption,
+};
 
 let app = express();
 let compiler = webpack(webpackConfig);

@@ -1,5 +1,5 @@
 <template>
-  <md-dialog ref="dialog">
+  <md-dialog ref="dialog" @close="$emit('close', added);">
     <md-dialog-title>添加用户</md-dialog-title>
     <md-dialog-content>
       <form @keyup.enter="register()">
@@ -29,6 +29,7 @@
       username: '',
       password: '',
       username_error: null,
+      added:false
     }),
     computed: {
       valid() {
@@ -42,7 +43,6 @@
       },
       close() {
         this.$refs.dialog.close();
-        this.$emit('close', false);
       },
       check_empty() {
         let error = false;
@@ -63,8 +63,8 @@
           .then(() => {
             this.username = '';
             this.password = '';
-            this.close();
-            this.$emit('close', true);
+            this.added = true;
+            this.$nextTick(() => this.close());
           })
           .catch(err => {
             switch (err.message) {

@@ -8,7 +8,7 @@
 export default {
   data () {
     return {
-      msg: '博客'
+      msg: '假装有个博客'
     }
   }
 };

@@ -33,7 +33,10 @@
         <md-table-body>
           <md-table-row v-for="(user, row) in users" :key="row" :md-item="user" md-selection ref="users">
             <md-table-cell key="avatar" width="100px">
-              <span>{{ user.avatar }}</span>
+              <span v-if="!user.avatar"></span>
+              <md-avatar v-else class="md-avatar-icon">
+                <img :src="user.avatar" alt="avatar">
+              </md-avatar>
             </md-table-cell>
             <md-table-cell key="username">
               <span>{{ user.user }}</span>

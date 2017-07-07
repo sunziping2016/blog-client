@@ -11,9 +11,12 @@
     </md-button>
 
     <md-menu v-else md-direction="bottom left">
-      <md-button md-menu-trigger class="md-icon-button">
+      <md-button v-if="!avatar" md-menu-trigger class="md-icon-button">
         <md-icon>more_vert</md-icon>
       </md-button>
+      <md-avatar v-else md-menu-trigger class="md-avatar-icon">
+        <img :src="avatar" alt="avatar">
+      </md-avatar>
       <md-menu-content>
         <md-menu-item @click="$router.push('/settings')">设置</md-menu-item>
         <md-menu-item @click="logout()">退出</md-menu-item>
@@ -28,6 +31,11 @@ export default {
   props: {
     title: String,
     pageTitle: String
+  },
+  computed: {
+    avatar() {
+      return this.$store.getters.avatar;
+    }
   },
   methods: {
     logout() {
@@ -58,5 +66,8 @@ export default {
     @media (min-width: 1281px) {
       margin-left: 8px;
     }
+  }
+  .md-avatar-icon {
+    cursor: pointer;
   }
 </style>

@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import _ from 'lodash';
 
 const state = {
   users: {}
@@ -23,6 +24,17 @@ const actions = {
     for (let uid of user_list)
       users[uid] = await dispatch('ajax', {action: 'user-info', data: {id: uid}});
     commit('update_all_user', users);
+  },
+  async refresh_avatar({state, commit}, uid) {
+    let user = state.users[uid], avatar = user.avatar;
+    if (avatar !== undefined) {
+      let index = avatar.lastIndexOf('?');
+      if (index === -1)
+        index = avatar.length;
+      avatar = avatar.slice(0, index) + '?' + Date.now();
+      user = _.extend({}, user, {avatar});
+      commit('update_user', {uid, user});
+    }
   },
   async add_user({dispatch}, user) {
     return await dispatch('ajax', {action: 'user-add', data: user});

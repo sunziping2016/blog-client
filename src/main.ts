@@ -35,7 +35,7 @@ function check_router(page) {
 
 (async () => {
   try {
-    await store.dispatch('change_site', 'http://127.0.0.1:21894');
+    await store.dispatch('change_site', location.origin);
     await store.dispatch('check_session');
   } finally {
     let app: any = new Vue({

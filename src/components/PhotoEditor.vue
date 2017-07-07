@@ -1,9 +1,9 @@
 <template>
-  <md-dialog ref="dialog" :md-fullscreen="true">
+  <md-dialog ref="dialog" :md-fullscreen="true" @close="on_close">
     <md-dialog-title>图片编辑</md-dialog-title>
     <md-dialog-content class="editor-dialog-content">
       <div class="editor">
-        <div class="canvas" @dblclick="dblclick" ref="canvas" :style="size">
+        <div class="canvas" ref="canvas" :style="size">
         </div>
         <div class="toolbar" v-if="cropper" @click="click">
           <button class="toolbar__button" data-action="move" title="Move (M)"><span class="fa fa-arrows"></span></button>
@@ -18,7 +18,7 @@
       </div>
     </md-dialog-content>
     <md-dialog-actions>
-      <md-button class="md-primary" @click="close()">取消</md-button>
+      <md-button class="md-primary" @click="close(false)">取消</md-button>
       <md-button class="md-primary" @click="close(true)">保存</md-button>
     </md-dialog-actions>
   </md-dialog>
@@ -37,9 +37,8 @@
         data: null,
         cropped: false,
         cropping: false,
-        size: {
-
-        }
+        size: {},
+        status: false
       };
     },
     mounted() {
@@ -71,9 +70,12 @@
         };
       },
       close(status) {
+        this.status = status;
         this.$refs.dialog.close();
-        this.$emit('close', !!status && this.cropper.getCroppedCanvas({ fillColor: '#fff' }));
-        stop();
+      },
+      on_close() {
+        this.$emit('close', !!this.status && this.cropper.getCroppedCanvas({fillColor: '#fff'}));
+        this.stop();
       },
       click({ target }) {
         const cropper = this.cropper;
@@ -185,13 +187,6 @@
             cropper.scaleY(-cropper.getData().scaleY || -1);
             break;
           default:
-        }
-      },
-      dblclick(e) {
-        if (e.target.className.indexOf('cropper-face') >= 0) {
-          e.preventDefault();
-          e.stopPropagation();
-          this.crop();
         }
       },
       start(image, options) {

@@ -75,6 +75,10 @@ const getters = {
   is_admin(state, getters, rootState) {
     let uid = state.uid;
     return uid !== null && rootState.user.users[uid] && rootState.user.users[uid].role === 'administrator';
+  },
+  avatar(state, getters, rootState) {
+    let user = state.uid  && rootState.user.users[state.uid];
+    return user && user.avatar;
   }
 };
 
