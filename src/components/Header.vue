@@ -14,6 +14,7 @@
         <md-icon>more_vert</md-icon>
       </md-button>
       <md-menu-content>
+        <md-menu-item disabled class="username">用户：{{username}}</md-menu-item>
         <md-menu-item @click="$router.push('/settings')">设置</md-menu-item>
         <md-menu-item @click="logout()">退出</md-menu-item>
       </md-menu-content>
@@ -23,6 +24,7 @@
         <img :src="avatar" alt="avatar">
       </md-avatar>
       <md-menu-content>
+        <md-menu-item disabled class="username">用户：{{username}}</md-menu-item>
         <md-menu-item @click="$router.push('/settings')">设置</md-menu-item>
         <md-menu-item @click="logout()">退出</md-menu-item>
       </md-menu-content>
@@ -40,6 +42,9 @@ export default {
   computed: {
     avatar() {
       return this.$store.getters.avatar;
+    },
+    username() {
+      return this.$store.getters.username;
     }
   },
   methods: {
@@ -56,7 +61,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .main-header {
     z-index: 2;
     color: #fff !important;
@@ -74,5 +79,11 @@ export default {
   }
   .md-avatar-icon {
     cursor: pointer;
+  }
+  .md-list-item.username {
+    color: gray;
+    & > .md-list-item-container {
+      text-align: center;
+    }
   }
 </style>

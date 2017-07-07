@@ -1,7 +1,7 @@
 <template>
   <md-dialog ref="dialog">
-    <md-tabs md-fixed md-elevation="1" @change="active=arguments[0];clearError()" ref="tabs">
-      <md-tab md-label="登入" id="login" class="no-padding">
+    <md-tabs md-fixed md-elevation="1" @change="active=arguments[0];clearError()" ref="tabs" class="md-transparent">
+      <md-tab md-label="登入" id="login" class="no-padding" md-active>
         <form @keyup.enter="login()">
           <md-input-container :class="{'md-input-invalid':username_error !== null}">
             <md-icon>account_circle</md-icon>
@@ -22,7 +22,7 @@
         </md-dialog-actions>
       </md-tab>
 
-      <md-tab md-label="注册" id="register" class="no-padding" mdDisabled>
+      <md-tab md-label="注册" id="register" class="no-padding">
         <form @keyup.enter="register()">
           <md-input-container :class="{'md-input-invalid':username_error !== null}">
             <md-icon>account_circle</md-icon>
@@ -125,6 +125,20 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+  .md-tabs {
+    .md-tabs-navigation {
+      height: 56px;
+    }
+    .md-tab-header-container {
+      font-size: 16px;
+    }
+  }
+  .md-theme-default.md-tabs.md-transparent > .md-tabs-navigation {
+    border-bottom: none;
+  }
+</style>
 
 <style scoped>
   input:-webkit-autofill {

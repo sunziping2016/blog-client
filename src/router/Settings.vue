@@ -307,7 +307,7 @@
     font-size: 16px;
     line-height: 32px;
     &.md-input-container {
-      max-width: 300px;
+      max-width: 150px;
     }
   }
   .fade-enter-active {

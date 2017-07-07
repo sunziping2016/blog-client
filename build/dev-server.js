@@ -14,9 +14,9 @@ const proxyOption = {
   changeOrigin: true
 };
 const proxyTable = {
-  '/api': proxyOption,
-  '/file': proxyOption,
-  '/ws': proxyOption,
+  '/api/': proxyOption,
+  '/file/': proxyOption,
+  '/ws/': proxyOption,
 };
 
 let app = express();
