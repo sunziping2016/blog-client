@@ -2,7 +2,7 @@
   <page-content>
     <md-card>
       <md-toolbar md-theme="white" class="md-dense">
-        <h3 class="md-title"><md-icon>account_circle</md-icon> 账户</h3>
+        <h3 class="md-title">账户</h3>
       </md-toolbar>
       <md-card-area class="account-settings">
         <div class="item">
@@ -24,17 +24,61 @@
             </transition>
           </md-whiteframe>
           <transition name="fade" mode="out-in">
-            <md-button class="item-edit md-icon-button" v-if="!edit_avatar" @click="edit_avatar=true">
+            <md-button class="item-edit md-icon-button" v-if="!!avatar && !edit_avatar" @click="edit_avatar=true">
               <md-icon>edit</md-icon>
             </md-button>
-            <md-button class="item-edit md-icon-button" v-else @click="edit_avatar=false;leave_edit_avatar()">
+            <md-button class="item-edit md-icon-button" v-else-if="!!avatar" @click="edit_avatar=false;leave_edit_avatar()">
               <md-icon>close</md-icon>
             </md-button>
           </transition>
         </div>
+        <div class="item">
+          <h4 class="item-label md-subheading md-primary">用户名</h4>
+          <span v-if="!edit_username" class="inline-text">{{username}}</span>
+          <md-input-container v-else md-inline class="inline-text">
+            <md-input type="text" :value="username"
+                      @keyup.enter.native="change_username()"
+                      @input="edited_username=arguments[0]"></md-input>
+          </md-input-container>
+          <transition name="fade" mode="out-in">
+            <md-button class="item-edit md-icon-button" v-if="!edit_username" @click="edit_username=true">
+              <md-icon>edit</md-icon>
+            </md-button>
+            <md-button class="item-edit md-icon-button" v-else @click="edit_username=false;">
+              <md-icon>close</md-icon>
+            </md-button>
+          </transition>
+        </div>
+        <div class="item">
+          <h4 class="item-label md-subheading md-primary">密码</h4>
+          <span class="inline-text">********</span>
+          <md-button class="item-edit md-icon-button" @click="edited_password='';$refs.password_prompt.open()">
+            <md-icon>edit</md-icon>
+          </md-button>
+        </div>
       </md-card-area>
     </md-card>
     <photo-editor ref="photo_editor"></photo-editor>
+    <md-dialog class="md-dialog-prompt" ref="password_prompt">
+      <md-dialog-title>请输入新密码：</md-dialog-title>
+      <md-dialog-content>
+        <md-input-container md-has-password>
+          <md-input type="password"
+                    v-model="edited_password"
+                    @keyup.enter.native="edited_password_valid && ($refs.password_prompt.close() || change_password())">
+          </md-input>
+        </md-input-container>
+      </md-dialog-content>
+
+      <md-dialog-actions>
+        <md-button class="md-primary" @click="$refs.password_prompt.close()">取消</md-button>
+        <md-button class="md-primary"
+                   :disabled="!edited_password_valid"
+                   @click="$refs.password_prompt.close();change_password()">
+          确定
+        </md-button>
+      </md-dialog-actions>
+    </md-dialog>
   </page-content>
 </template>
 
@@ -65,10 +109,19 @@
         showRemoveLink: false
       },
       edit_avatar: false,
+      edit_username: false,
+      edited_username: '',
+      edited_password: '',
     }),
     computed: {
       avatar() {
         return this.$store.getters.avatar;
+      },
+      username() {
+        return this.$store.getters.username;
+      },
+      edited_password_valid() {
+        return this.edited_password !== '';
       }
     },
     methods: {
@@ -125,6 +178,21 @@
           content[i] = byteString.charCodeAt(i)
         }
         return new Blob([content], {type: mimestring});
+      },
+      change_username() {
+        this.$store.dispatch('user_modify', {username: this.edited_username})
+          .then(() => this.$store.dispatch('update_user', this.$store.state.session.uid))
+          .catch(err => {
+            this.$root.$refs.app.message(err.message);
+          })
+          .then(() => this.edit_username=false);
+      },
+      change_password() {
+        this.$store.dispatch('user_modify', {password: this.edited_password})
+          .then(() => this.$store.dispatch('update_user', this.$store.state.session.uid))
+          .catch(err => {
+            this.$root.$refs.app.message(err.message);
+          });
       }
     }
   };
@@ -139,6 +207,7 @@
       width: $preview-size;
       height: $preview-size;
     }
+    margin: 8px 0;
   }
   .vue-dropzone .dz-preview {
     .dz-success-mark, .dz-error-mark {
@@ -213,12 +282,14 @@
     }
   }
   .item {
+    margin: 24px;
     display: flex;
     align-items: center;
     &-label {
       display: inline-block;
       min-width: 80px;
       align-self: flex-start;
+      line-height: 40px;
     }
     &-edit {
       opacity: 0;
@@ -229,8 +300,15 @@
       }
     }
   }
-  .md-card-area {
-    padding: 24px;
+  .inline-text {
+    margin: 0;
+    padding: 0;
+    min-height: 32px;
+    font-size: 16px;
+    line-height: 32px;
+    &.md-input-container {
+      max-width: 300px;
+    }
   }
   .fade-enter-active {
     transition: all .15s linear;

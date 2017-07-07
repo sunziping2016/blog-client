@@ -9,12 +9,17 @@
     <md-button v-if="!$store.getters.logined" class="md-icon-button" @click="$root.$children[0].openLoginDialog()">
       <md-icon>account_circle</md-icon>
     </md-button>
-
-    <md-menu v-else md-direction="bottom left">
-      <md-button v-if="!avatar" md-menu-trigger class="md-icon-button">
+    <md-menu v-else-if="!avatar" md-direction="bottom left">
+      <md-button md-menu-trigger class="md-icon-button">
         <md-icon>more_vert</md-icon>
       </md-button>
-      <md-avatar v-else md-menu-trigger class="md-avatar-icon">
+      <md-menu-content>
+        <md-menu-item @click="$router.push('/settings')">设置</md-menu-item>
+        <md-menu-item @click="logout()">退出</md-menu-item>
+      </md-menu-content>
+    </md-menu>
+    <md-menu v-else md-direction="bottom left">
+      <md-avatar md-menu-trigger class="md-avatar-icon">
         <img :src="avatar" alt="avatar">
       </md-avatar>
       <md-menu-content>

@@ -76,9 +76,14 @@ const getters = {
     let uid = state.uid;
     return uid !== null && rootState.user.users[uid] && rootState.user.users[uid].role === 'administrator';
   },
+  user(state, getters, rootState) {
+    return state.uid && rootState.user.users[state.uid];
+  },
   avatar(state, getters, rootState) {
-    let user = state.uid  && rootState.user.users[state.uid];
-    return user && user.avatar;
+    return getters.user && getters.user.avatar;
+  },
+  username(state, getters, rootState) {
+    return getters.user && getters.user.user;
   }
 };
 

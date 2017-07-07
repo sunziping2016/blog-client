@@ -63,6 +63,9 @@
           if (image.width < 320) {
             image.style.width = `320px`;
             this.size = {'max-width': `320px`};
+          } else if (image.width > 720) {
+            image.style.width = `720px`;
+            this.size = {'max-width': `720px`};
           } else
             this.size = {'max-width': `${image.width}px`};
           this.$refs.canvas.appendChild(image);
@@ -254,14 +257,8 @@
 </script>
 
 <style lang="scss">
-  .md-fullscreen {
-
-  }
   .cropper-container {
     margin-left: -100%;
-  }
-  .editor-dialog-content {
-    overflow: hidden;
   }
   .editor {
     overflow: hidden;

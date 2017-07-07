@@ -7,9 +7,23 @@ const state = {
 
 const mutations = {
   update_user(state, {uid, user}) {
-      Vue.set(state.users, uid, user);
+    if (user.avatar !== undefined) {
+      let index = user.avatar.lastIndexOf('?');
+      if (index === -1)
+        index = user.avatar.length;
+      user.avatar = user.avatar.slice(0, index) + '?' + Date.now();
+    }
+    Vue.set(state.users, uid, user);
   },
   update_all_user(state, users) {
+    for (let user of users) {
+      if (user.avatar !== undefined) {
+        let index = user.avatar.lastIndexOf('?');
+        if (index === -1)
+          index = user.avatar.length;
+        user.avatar = user.avatar.slice(0, index) + '?' + Date.now();
+      }
+    }
     state.users = users;
   }
 };
@@ -44,7 +58,10 @@ const actions = {
   },
   async set_role({dispatch}, data) {
     return await dispatch('ajax', {action: 'user-set-role', data});
-  }
+  },
+  async user_modify({dispatch}, user) {
+    return await dispatch('ajax', {action: 'user-update', data: user});
+  },
 };
 
 export default {

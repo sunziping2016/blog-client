@@ -22,7 +22,7 @@
         </md-dialog-actions>
       </md-tab>
 
-      <md-tab md-label="注册" id="register" class="no-padding">
+      <md-tab md-label="注册" id="register" class="no-padding" mdDisabled>
         <form @keyup.enter="register()">
           <md-input-container :class="{'md-input-invalid':username_error !== null}">
             <md-icon>account_circle</md-icon>
