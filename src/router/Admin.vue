@@ -128,15 +128,20 @@
           if (go_on) {
             await Promise.all(ids.map(user => user !== self && this.$store.dispatch('remove_user', user)));
             if (contains) {
-              await this.$store.dispatch('remove_user', self);
-              await this.$store.dispatch('check_session');
+              try {
+                await this.$store.dispatch('remove_user', self);
+                await this.$store.dispatch('check_session');
+              } catch(err) {
+                await this.$store.dispatch('update_all_user');
+                throw err;
+              }
             } else
               await this.$store.dispatch('update_all_user');
           }
         })()
           .catch(err => {
-              this.$root.$children[0].message(err.message);
-            });
+            this.$root.$children[0].message(err.message);
+          });
       },
       change_role(new_role, user, row) {
         if (user.role !== new_role) {
