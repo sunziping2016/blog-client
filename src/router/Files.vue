@@ -1,6 +1,6 @@
 <template>
   <page-content>
-    <md-card>
+    <md-card class="md-table-card">
       <md-toolbar md-theme="white" class="md-dense">
         <h3 class="md-title">文件浏览</h3>
       </md-toolbar>
@@ -14,7 +14,8 @@
             呼呼
           </md-tab>
         </md-tabs>
-      </md-card-area>    </md-card>
+      </md-card-area>
+    </md-card>
   </page-content>
 </template>
 

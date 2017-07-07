@@ -285,7 +285,7 @@
     margin: 24px;
     display: flex;
     align-items: center;
-    &-label {
+    &-label.md-subheading {
       display: inline-block;
       min-width: 80px;
       align-self: flex-start;
@@ -307,6 +307,11 @@
     font-size: 16px;
     line-height: 32px;
     &.md-input-container {
+      margin: 0;
+      padding: 0;
+      min-height: 32px;
+      font-size: 16px;
+      line-height: 32px;
       max-width: 150px;
     }
   }

@@ -4,6 +4,7 @@ import Sidenav from './Sidenav.vue';
 import PageContent from './PageContent.vue';
 import UserAddDialog from './UserAddDialog.vue';
 import PhotoEditor from './PhotoEditor.vue';
+import FileManger from './FileManager.vue';
 
 export default {
   'login-dialog': LoginDialog,
@@ -11,5 +12,6 @@ export default {
   'main-sidebar': Sidenav,
   'page-content': PageContent,
   'useradd-dialog': UserAddDialog,
-  'photo-editor': PhotoEditor
+  'photo-editor': PhotoEditor,
+  'file-manager': FileManger
 };
