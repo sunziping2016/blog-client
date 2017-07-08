@@ -136,7 +136,7 @@ export default {
     }
   }
   .md-theme-default.md-tabs.md-transparent > .md-tabs-navigation {
-    border-bottom: none;
+    border-bottom: none !important;
   }
 </style>
 

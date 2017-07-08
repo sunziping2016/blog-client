@@ -5,6 +5,7 @@ import PageContent from './PageContent.vue';
 import UserAddDialog from './UserAddDialog.vue';
 import PhotoEditor from './PhotoEditor.vue';
 import FileManger from './FileManager.vue';
+import UploadDialog from './UploadDialog.vue';
 
 export default {
   'login-dialog': LoginDialog,
@@ -13,5 +14,6 @@ export default {
   'page-content': PageContent,
   'useradd-dialog': UserAddDialog,
   'photo-editor': PhotoEditor,
-  'file-manager': FileManger
+  'file-manager': FileManger,
+  'upload-dialog': UploadDialog
 };

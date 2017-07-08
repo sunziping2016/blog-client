@@ -3,6 +3,9 @@
     <md-dialog-title>添加用户</md-dialog-title>
     <md-dialog-content>
       <form @keyup.enter="register()">
+        <!-- fake fields are a workaround for chrome autofill getting the wrong fields -->
+        <input style="display:none" type="text" name="fakeusernameremembered">
+        <input style="display:none" type="password" name="fakepasswordremembered">
         <md-input-container :class="{'md-input-invalid':username_error !== null}">
           <md-icon>account_circle</md-icon>
           <label>用户名</label>
@@ -76,7 +79,7 @@
           });
       }
     }
-  }
+  };
 </script>
 
 <style scoped>

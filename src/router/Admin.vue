@@ -32,7 +32,7 @@
 
         <md-table-body>
           <md-table-row v-for="(user, row) in users" :key="row" :md-item="user" md-selection ref="users">
-            <md-table-cell key="avatar" width="100px">
+            <md-table-cell key="avatar" width="80px">
               <span v-if="!user.avatar"></span>
               <md-avatar v-else class="md-avatar-icon">
                 <img :src="user.avatar" alt="avatar">
@@ -108,15 +108,11 @@
               await this.$store.dispatch('update_all_user');
           }
         })()
-          .catch(err => {
-            this.$root.$children[0].message(err.message);
-          });
+          .catch(err => this.$root.$refs.app.message(err.message));
       },
       update_all_user() {
         this.$store.dispatch('update_all_user')
-          .catch(err => {
-            this.$root.$children[0].message(err.message);
-          });
+          .catch(err => this.$root.$refs.app.message(err.message));
       },
       delete_selected() {
         (async ()=>{

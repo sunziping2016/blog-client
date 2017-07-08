@@ -60,6 +60,9 @@
     </md-card>
     <photo-editor ref="photo_editor"></photo-editor>
     <md-dialog class="md-dialog-prompt" ref="password_prompt">
+      <!-- fake fields are a workaround for chrome autofill getting the wrong fields -->
+      <input style="display:none" type="text" name="fakeusernameremembered">
+      <input style="display:none" type="password" name="fakepasswordremembered">
       <md-dialog-title>请输入新密码：</md-dialog-title>
       <md-dialog-content>
         <md-input-container md-has-password>
@@ -87,7 +90,7 @@
     data: () => ({
       avatar_dropzone: {
         language: {
-          dictDefaultMessage          : '上传头像',
+          dictDefaultMessage          : '<br>上传头像',
           dictCancelUpload            : '',
           dictCancelUploadConfirmation: '确定要取消上传么?',
           dictFallbackMessage         : '浏览器不支持拖拽',
@@ -151,7 +154,8 @@
         })
       },
       uploading_finished() {
-        this.$store.dispatch('refresh_avatar', this.$store.state.session.uid)
+        this.$store.dispatch(this.avatar === undefined ? 'update_user' : 'refresh_avatar',
+          this.$store.state.session.uid)
           .then(() => this.leave_edit_avatar())
           .catch(err => {
             this.$root.$refs.app.message(err.message);
@@ -217,9 +221,9 @@
       }
     }
   }
-  .dropzone {
-    padding: 0;
-    border: none;
+  .vue-dropzone.dropzone {
+    padding: 0!important;
+    border: none!important;
     position: absolute;
     width: 100%;
     height: 100%;
@@ -228,13 +232,13 @@
       border: none;
     }
     .dz-message {
-      margin: $preview-size/2-20px 0
+      margin: $preview-size/2-20px 0;
     }
     .dz-preview {
-      margin: 0;
+      margin: 0!important;
       &:not(:hover) {
         .dz-success-mark, .dz-error-mark{
-          text-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+          text-shadow: 0 0 5px rgba(0, 0, 0, 0.6);;
         }
         .dz-progress {
           box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
