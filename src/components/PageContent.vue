@@ -19,7 +19,7 @@
     max-width: 920px;
     width: 90%;
     margin: 0 auto;
-    padding: 24px;
+    padding: 24px 0;
     flex-shrink: 1;
   }
 </style>

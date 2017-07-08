@@ -2,8 +2,17 @@
   <page-content>
     <div class="post" v-for="post in posts">
       <h3 class="title" ><router-link exact :to="post.path">{{post.title}}</router-link></h3>
-      <span class="author"><i class="material-icons">account_circle</i> {{post.owner.user}}</span>
-      <span class="author"><i class="material-icons">access_time</i> {{post.date.toLocaleString('en', {hour12: false})}}</span>
+      <div class="author">
+        <md-avatar v-if="post.owner.avatar" md-menu-trigger class="md-avatar-icon">
+          <img :src="post.owner.avatar" alt="avatar">
+        </md-avatar>
+        <md-icon v-else>account_circle</md-icon>
+        <span>{{post.owner.user}}</span>
+      </div>
+      <div class="time">
+        <md-icon>access_time</md-icon>
+        <span>{{post.date.toLocaleString('en', {hour12: false})}}</span>
+      </div>
     </div>
   </page-content>
 </template>
@@ -38,8 +47,26 @@ export default {
 };
 </script>
 
-<style scoped>
-  h3 {
-    line-height: 18px;
+<style scoped lang="scss">
+.post {
+  .title a {
+    color: rgba(0, 0, 0, 0.9);
+    font-size: 28px;
   }
+  .author {
+    color: rgba(0, 0, 0, 0.56);
+    .md-avatar {
+      min-width: 24px;
+      min-height: 24px;
+      width: 24px;
+      height: 24px;
+    }
+  }
+  .time {
+    color: rgba(0, 0, 0, 0.56);
+  }
+}
+.post ~ .post {
+  margin-top: 40px;
+}
 </style>

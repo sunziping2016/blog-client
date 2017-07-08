@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import _ from 'lodash';
 
 const state = {
   posts: {}
@@ -17,14 +16,14 @@ const mutations = {
 const actions = {
   async update_post({commit, dispatch}, id) {
     let post = await dispatch('ajax', {action: 'post-info', data: {id}});
-    await dispatch('ajax', {action: 'user-info', data: {id:post.owner}});
+    await dispatch('update_user',post.owner);
     commit('update_post', {id, post});
   },
   async update_all_posts({commit, dispatch}) {
     let post_list = await dispatch('ajax', {action: 'post-list'}), posts = {};
     for (let id of post_list) {
       posts[id] = await dispatch('ajax', {action: 'post-info', data: {id}});
-      await dispatch('ajax', {action: 'user-info', data: {id:posts[id].owner}});
+      await dispatch('update_user',posts[id].owner);
     }
     commit('update_all_posts', posts);
   },
