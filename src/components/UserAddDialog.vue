@@ -74,7 +74,7 @@
               case 'User already exists':
                 this.username_error = '用户同名'; break;
               default:
-                this.$root.$children[0].message(err.message);
+                this.$root.$refs.app.message(err.message);
             }
           });
       }

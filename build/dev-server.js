@@ -44,7 +44,16 @@ Object.keys(proxyTable).forEach(context => {
   app.use(proxyMiddleware(options.filter || context, options));
 });
 
-app.use(require('connect-history-api-fallback')());
+app.use(require('connect-history-api-fallback')({
+  rewrites: [
+    { from: /.*/, to: (context) => {
+      let path = context.parsedUrl.pathname;
+      if (path.endsWith('.html') || path.endsWith('.js') || path.endsWith('.css') || path.endsWith('.json'))
+        return path;
+      return '/index.html'
+    }}
+  ]
+}));
 app.use(devMiddleware);
 app.use(hotMiddleware);
 app.use('/static', express.static('./static'));

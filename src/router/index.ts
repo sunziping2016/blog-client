@@ -4,6 +4,7 @@ import Home from './Home.vue';
 import Admin from './Admin.vue';
 import Settings from './Settings.vue';
 import Files from './Files.vue';
+import Post from './Post.vue';
 
 Vue.use(Router);
 
@@ -16,14 +17,20 @@ export default new Router({
       meta: { title: "首页" }
     },
     {
-      path: '/files/:mode(private|share):path(/.*)',
+      path: '/post:path(/.*|)',
+      name: 'Post',
+      component: Post,
+      meta: { title: "文章"}
+    },
+    {
+      path: '/files/:mode(private|share):path(/.*|)',
       name: 'Files Private',
       component: Files,
       meta: { title: "文件"}
     },
     {
       path: '/files(/)?*',
-      redirect: '/files/private/'
+      redirect: '/files/private'
     },
     {
       path: '/admin',

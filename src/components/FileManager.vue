@@ -36,7 +36,7 @@
           <md-table-cell key="name" class="file-cell">
             <md-icon>
               {{file.type === 'dir' ?
-              (file.name === 'public' ?
+              (file.public ?
                 'folder_shared' :
                 'folder') :
               'insert_drive_file'
@@ -50,6 +50,9 @@
               {{file.name}}
             </a>
             <div class="button-group">
+              <md-button v-if="file.public && file.type !== 'dir' && file.name.endsWith('.md')" class="md-icon-button" @click="create_post(file.name)">
+                <md-icon>publish</md-icon>
+              </md-button>
               <md-button v-if="file.type !== 'dir'" class="md-icon-button" @click="download([file.url])">
                 <md-icon>file_download</md-icon>
               </md-button>
@@ -93,7 +96,7 @@
         </md-button>
       </md-dialog-actions>
     </md-dialog>
-
+    <post-dialog ref="post_dialog"></post-dialog>
   </md-table-card>
 </template>
 
@@ -189,7 +192,13 @@ export default {
           if (checkbox.value)
             checkbox.parentElement.click();
         });
-    }
+    },
+    create_post(name) {
+      let new_path = this.path.slice(1);
+      new_path.push(name);
+      let url = `/file/${this.$store.state.session.uid}/${new_path.join('/')}`;
+      this.$refs.post_dialog.open(url);
+    },
   },
 };
 </script>

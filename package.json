@@ -22,6 +22,7 @@
   "dependencies": {
     "cropperjs": "^1.0.0-rc.2",
     "lodash": "^4.17.4",
+    "marked": "^0.3.6",
     "vue": "^2.3.4",
     "vue-material": "^0.7.4",
     "vue-monaco-editor": "0.0.19",

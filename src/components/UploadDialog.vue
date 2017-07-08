@@ -67,7 +67,7 @@
     min-height: 80%;
     .md-dialog-title {
       max-height: 32px;
-      box-sizing: content-box;
+      box-sizing: content-box!important;
     }
     .md-dialog-content {
       display: flex;
@@ -75,7 +75,7 @@
       flex-direction: column;
     }
   }
-  .dropzone {
+  .vue-dropzone.dropzone {
     position: relative;
     padding: 0;
     border: none;

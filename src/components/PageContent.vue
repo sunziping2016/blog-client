@@ -1,6 +1,8 @@
 <template>
-  <div class="page-content">
-    <slot></slot>
+  <div class="outer-content">
+    <div class="page-content">
+      <slot></slot>
+    </div>
   </div>
 </template>
 
@@ -9,14 +11,15 @@
 </script>
 
 <style scoped>
-  .page-content {
-    padding: 12px;
-    overflow: auto;
+  .outer-content {
     display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    align-self: center;
+    overflow: auto;
+  }
+  .page-content {
     max-width: 920px;
-    width: 100%;
+    width: 90%;
+    margin: 0 auto;
+    padding: 24px;
+    flex-shrink: 1;
   }
 </style>

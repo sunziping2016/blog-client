@@ -10,7 +10,7 @@
           <router-link exact to="/">首页</router-link>
         </md-list-item>
       </md-list>
-      <md-list>
+      <md-list v-if="$store.getters.logined">
         <md-list-item>
           <router-link exact to="/files">文件</router-link>
         </md-list-item>

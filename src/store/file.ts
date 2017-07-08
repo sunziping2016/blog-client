@@ -47,7 +47,7 @@ const actions = {
       throw new Error('Cannot get access to server.');
     let url = `${rootState.api.site}/${['file'].concat(path).join('/')}`,
       param = {mode, name, type}, response,
-      qs = Object.keys(param).map(x => x + '=' + param[x]).join('&');
+      qs = Object.keys(param).filter(x=>param[x]!==undefined).map(x => x + '=' + param[x]).join('&');
     if (path.length == 0)
       url += '/';
     if (qs !== '')
@@ -72,7 +72,7 @@ const actions = {
       throw new Error('Cannot get access to server.');
     let url = `${rootState.api.site}/${['file'].concat(path).join('/')}`,
       param = {mode, name, type: 'dir'}, response, data = new FormData();
-    Object.keys(param).forEach(x => data.append(x, param[x]));
+    Object.keys(param).filter(x=>param[x]!==undefined).forEach(x => data.append(x, param[x]));
     response = await fetch(url, {method: 'POST', credentials: 'include', body:data});
     let json = await response.json();
     if (json.status !== 0)
@@ -84,7 +84,7 @@ const actions = {
       throw new Error('Cannot get access to server.');
     let url = `${rootState.api.site}/${['file'].concat(path).join('/')}`,
       param = {mode, name}, response, data = new FormData();
-    Object.keys(param).forEach(x => data.append(x, param[x]));
+    Object.keys(param).filter(x=>param[x]!==undefined).forEach(x => data.append(x, param[x]));
     response = await fetch(url, {method: 'DELETE', credentials: 'include', body:data});
     let json = await response.json();
     if (json.status !== 0)

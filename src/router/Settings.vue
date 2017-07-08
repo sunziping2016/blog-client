@@ -207,80 +207,80 @@
   .avatar-dropzone {
     width: $preview-size;
     height: $preview-size;
+    margin: 8px 0;
     & > img {
       width: $preview-size;
       height: $preview-size;
     }
-    margin: 8px 0;
-  }
-  .vue-dropzone .dz-preview {
-    .dz-success-mark, .dz-error-mark {
-      top: 55%!important;
-      i {
-        font-size: 65px!important;
+    .vue-dropzone .dz-preview {
+      .dz-success-mark, .dz-error-mark {
+        top: 55%!important;
+        i {
+          font-size: 65px!important;
+        }
       }
     }
-  }
-  .vue-dropzone.dropzone {
-    padding: 0!important;
-    border: none!important;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    min-height: 100%;
-    &.dz-drag-hover {
-      border: none;
-    }
-    .dz-message {
-      margin: $preview-size/2-20px 0;
-    }
-    .dz-preview {
-      margin: 0!important;
-      &:not(:hover) {
-        .dz-success-mark, .dz-error-mark{
-          text-shadow: 0 0 5px rgba(0, 0, 0, 0.6);;
+    .vue-dropzone.dropzone {
+      padding: 0!important;
+      border: none!important;
+      position: absolute!important;
+      width: 100%;
+      height: 100%;
+      min-height: 100%;
+      &.dz-drag-hover {
+        border: none;
+      }
+      .dz-message {
+        margin: $preview-size/2-20px 0;
+      }
+      .dz-preview {
+        margin: 0!important;
+        &:not(:hover) {
+          .dz-success-mark, .dz-error-mark{
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.6);;
+          }
+          .dz-progress {
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+          }
+          .dz-success-mark {
+            opacity: 0;
+          }
+        }
+        .dz-image img {
+          width: $preview-size;
         }
         .dz-progress {
-          box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+          top: 60%;
         }
-        .dz-success-mark {
-          opacity: 0;
+        .dz-error-message {
+          top: 70%;
         }
-      }
-      .dz-image img {
-        width: $preview-size;
-      }
-      .dz-progress {
-        top: 60%;
-      }
-      .dz-error-message {
-        top: 70%;
-      }
-      .dz-remove {
-        visibility: hidden;
-        top: -8px;
-        right: -8px;
-        left: auto;
-        bottom: auto;
-        &:after {
-          content: '\e5cd';
-          visibility: visible;
-          font-family: 'Material Icons';
-          font-weight: bold;
-          font-size: 36px; /* Preferred icon size */
-          display: inline-block;
-          line-height: 1;
-          white-space: nowrap;
-          direction: ltr;
+        .dz-remove {
+          visibility: hidden;
+          top: -8px;
+          right: -8px;
+          left: auto;
+          bottom: auto;
+          &:after {
+            content: '\e5cd';
+            visibility: visible;
+            font-family: 'Material Icons';
+            font-weight: bold;
+            font-size: 36px; /* Preferred icon size */
+            display: inline-block;
+            line-height: 1;
+            white-space: nowrap;
+            direction: ltr;
 
-          /* Support for all WebKit browsers. */
-          -webkit-font-smoothing: antialiased;
-          /* Support for Safari and Chrome. */
-          text-rendering: optimizeLegibility;
-          /* Support for Firefox. */
-          -moz-osx-font-smoothing: grayscale;
-          /* Support for IE. */
-          font-feature-settings: 'liga';
+            /* Support for all WebKit browsers. */
+            -webkit-font-smoothing: antialiased;
+            /* Support for Safari and Chrome. */
+            text-rendering: optimizeLegibility;
+            /* Support for Firefox. */
+            -moz-osx-font-smoothing: grayscale;
+            /* Support for IE. */
+            font-feature-settings: 'liga';
+          }
         }
       }
     }
