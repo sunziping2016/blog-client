@@ -56,7 +56,7 @@ const styleLoaders = (() => {
 
 module.exports = {
   entry: {
-    app: ['babel-polyfill', './src/entry.ts']
+    app: ['babel-polyfill', './src/main.ts']
   },
   output: {
     path: path.resolve(__dirname, '../dist'),

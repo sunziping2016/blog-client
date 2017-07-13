@@ -1,5 +1,5 @@
 <template>
-  <div ref="app">
+  <div id="app">
     <app-header></app-header>
     <div class="app-shell app-shell-bottom-navigation">
       <div class="app-view-wrapper">
@@ -21,10 +21,12 @@
         </transition>
       </div>
     </div>
+    <app-snackbar></app-snackbar>
   </div>
 </template>
 
 <script lang="ts">
+  import bus from '@/event-bus';
   export default {
   };
 </script>
