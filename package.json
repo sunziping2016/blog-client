@@ -8,8 +8,7 @@
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",
     "build": "node build/build.js",
-    "analyze": "npm_config_report=true node build/build.js",
-    "deploy": "node build/build.js && cp -r dist/* /srv/http/blog"
+    "deploy": "node build/build.js && sh build/deploy.sh"
   },
   "repository": {
     "type": "git",
@@ -21,13 +20,16 @@
   "homepage": "https://github.com/sunziping2016/blog-client#readme",
   "dependencies": {
     "cropperjs": "^1.0.0-rc.2",
+    "fastclick": "^1.0.6",
     "lodash": "^4.17.4",
     "marked": "^0.3.6",
+    "normalize.css": "^7.0.0",
     "vue": "^2.3.4",
-    "vue-material": "^0.7.4",
+    "vue-awesome": "^2.3.1",
     "vue-monaco-editor": "0.0.19",
     "vue-router": "^2.6.0",
     "vue2-dropzone": "^2.3.4",
+    "vuetify": "^0.13.1",
     "vuex": "^2.3.1",
     "vuex-router-sync": "^4.2.0",
     "whatwg-fetch": "^2.0.3"
@@ -38,6 +40,7 @@
     "babel-core": "^6.25.0",
     "babel-loader": "^7.1.0",
     "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.23.0",
     "babel-preset-env": "^1.5.2",
     "babel-preset-stage-2": "^6.24.1",
     "compression-webpack-plugin": "^0.4.0",
@@ -58,6 +61,11 @@
     "ora": "^1.3.0",
     "rimraf": "^2.6.1",
     "sass-loader": "^6.0.6",
+    "style-loader": "^0.18.2",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.1",
+    "sw-precache-webpack-plugin": "^0.11.4",
+    "sw-register-webpack-plugin": "^1.0.10",
     "ts-loader": "^2.2.0",
     "typescript": "^2.4.1",
     "url-loader": "^0.5.9",

@@ -7,6 +7,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
+const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
+const SwRegisterWebpackPlugin = require('sw-register-webpack-plugin');
 
 let webpackConfig = merge(baseWebpackConfig, {
   output: {
@@ -31,7 +33,7 @@ let webpackConfig = merge(baseWebpackConfig, {
         removeComments: true,
         collapseWhitespace: true
       },
-      chunksSortMode: 'dependency'
+      chunksSortMode: 'dependency',
     }),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
@@ -55,6 +57,26 @@ let webpackConfig = merge(baseWebpackConfig, {
         ignore: ['.*']
       }
     ]),
+    new SWPrecacheWebpackPlugin({
+      cacheId: 'sw-cache-blog-client2',
+      filename: 'service-worker.js',
+      staticFileGlobs: [],
+      staticFileGlobsIgnorePatterns: [
+        /\.map$/,
+        /\.gz$/,
+        /^sw-register\.js$/
+      ],
+      mergeStaticsConfig: true,
+      stripPrefix: 'dist/',
+      navigateFallback: '/index.html',
+      navigateFallbackWhitelist: [/^(?!.*\.html$).*/],
+      minify: true,
+      runtimeCaching: [
+      ]
+    }),
+    new SwRegisterWebpackPlugin({
+      filePath: path.resolve(__dirname, '../src/sw-register.js')
+    }),
     new CompressionWebpackPlugin({
       asset: '[path].gz[query]',
       algorithm: 'gzip',
