@@ -1,6 +1,7 @@
 <template>
-  <v-toolbar dark class="primary">
-    <v-toolbar-side-icon></v-toolbar-side-icon>
+  <v-toolbar fixed dark class="primary">
+    <v-toolbar-side-icon @click.native.stop="$store.commit('drawerToggle')">
+    </v-toolbar-side-icon>
     <v-toolbar-title class="white--text">Title</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-btn icon>
@@ -22,11 +23,6 @@
   import {mapState} from 'vuex';
 
   export default {
-    name: 'appHeader',
-    computed: {
-    },
-    methods: {
-    }
   };
 </script>
 

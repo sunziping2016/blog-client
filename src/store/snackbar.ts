@@ -9,8 +9,6 @@ interface Message {
 class State {
   snackbar: boolean = false;
   snackbar_messages: Array<Message> = [];
-
-  new_version_available = false;
 }
 
 const state = new State();
@@ -29,10 +27,6 @@ const mutations = {
   },
   snackbarSet(state: State, value: boolean): void {
     state.snackbar = value;
-  },
-
-  newVersionAvailable(state: State) {
-    state.new_version_available = true;
   }
 };
 

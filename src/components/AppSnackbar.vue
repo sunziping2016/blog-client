@@ -35,11 +35,11 @@
           action_text: 'Close',
           action_class: 'pink--text',
           timeout: 6000
-        }, this.$store.state.ui.snackbar_messages[0]);
+        }, this.$store.state.snackbar.snackbar_messages[0]);
       },
       snackbar: {
         get(): boolean {
-          return this.$store.state.ui.snackbar;
+          return this.$store.state.snackbar.snackbar;
         },
         set(value: boolean): void {
           this.snackbarSet(value);
@@ -54,8 +54,11 @@
     },
     mounted() {
       bus.$on('app-snackbar:close', () => this.snackbarSet(false));
-      bus.$on('app-snackbar:refresh', () => location.reload());
-      this.$store.watch(state => state.ui.new_version_available, value => {
+      bus.$on('app-snackbar:refresh', () => {
+        this.snackbarSet(false);
+        setTimeout(() => location.reload(), 400);
+      });
+      this.$store.watch(state => state.app.new_version_available, value => {
         this.$store.commit('snackbarAddMessage', {
           content: '已更新至最新版本',
           action: 'refresh',

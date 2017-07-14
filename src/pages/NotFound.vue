@@ -13,11 +13,7 @@
   import {mapActions} from 'vuex';
 
   export default {
-    name: 'notFound',
-    methods: {
-    },
-    activated() {
-    }
+    name: 'notFound'
   };
 </script>
 

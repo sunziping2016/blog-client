@@ -1,28 +1,14 @@
 <template>
-  <div id="app">
+  <v-app id="app">
+    <app-drawer></app-drawer>
     <app-header></app-header>
-    <div class="app-shell app-shell-bottom-navigation">
-      <div class="app-view-wrapper">
-        <transition>
-          <keep-alive>
-            <router-view
-              :key="$route.fullPath"
-              v-if="!$route.meta.notKeepAlive"
-              class="app-view">
-            </router-view>
-          </keep-alive>
-        </transition>
-        <transition>
-          <router-view
-            :key="$route.fullPath"
-            v-if="$route.meta.notKeepAlive"
-            class="app-view">
-          </router-view>
-        </transition>
-      </div>
-    </div>
+    <main>
+      <v-container fluid>
+        <router-view></router-view>
+      </v-container>
+    </main>
     <app-snackbar></app-snackbar>
-  </div>
+  </v-app>
 </template>
 
 <script lang="ts">

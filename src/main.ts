@@ -5,7 +5,7 @@ import Icon from 'vue-awesome/components/Icon.vue';
 import FastClick from 'fastclick';
 import App from './App.vue';
 import components from './components';
-import router from './router';
+import router from './pages';
 import store from './store';
 import { sync } from 'vuex-router-sync';
 

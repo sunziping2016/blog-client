@@ -13,7 +13,7 @@ declare global {
   const System: System;
 }
 
-let NotFound = () => System.import('@/pages/NotFound.vue');
+let NotFound = () => System.import('./NotFound.vue');
 
 Vue.use(Router);
 
