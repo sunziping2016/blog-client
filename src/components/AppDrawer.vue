@@ -18,39 +18,56 @@
     </v-list>
     <v-list>
       <v-divider></v-divider>
-      <v-list-tile v-for="item in items" :key="item">
-        <v-list-tile-action>
+      <component v-for="item, row in items"
+                 :key="item.action || `action-${row}`"
+                 :is="item.type || 'v-list-tile'"
+                 @click.native.stop='handleClick(item)'>
+        <v-list-tile-action v-if="!item.type || item.type === 'v-list-tile'">
           <v-icon>{{ item.icon }}</v-icon>
         </v-list-tile-action>
-        <v-list-tile-content>
+        <v-list-tile-content v-if="!item.type || item.type === 'v-list-tile'">
           <v-list-tile-title>{{ item.title }}</v-list-tile-title>
         </v-list-tile-content>
-      </v-list-tile>
+      </component>
     </v-list>
   </v-navigation-drawer>
 </template>
 
 <script lang="ts">
+  import bus from '@/event-bus.js';
+
   export default {
-    data () {
-      return {
-        items: [
-          { title: 'Home', icon: 'dashboard' },
-          { title: 'About', icon: 'question_answer' }
-        ],
-        mini: false,
-        right: null
-      }
-    },
     computed: {
       drawer: {
         get(): boolean {
           return this.$store.state.drawer.drawer;
         },
         set(value: boolean): void {
-          this.$store.commit('drawerSet', value);
+          if (value !== this.drawer)
+            this.$store.commit('drawerSet', value);
         }
+      },
+      mini: {
+        get(): boolean {
+          return this.$store.state.drawer.mini;
+        },
+        set(value: boolean): void {
+          if (value !== this.mini)
+            this.$store.commit('drawerSetMini', value);
+        }
+      },
+      items() {
+        return this.$store.state.drawer.items;
       }
+    },
+    methods: {
+      handleClick(item) {
+        if (item.action)
+          bus.$emit(`app-drawer:${item.action}`, item.action_data);
+      }
+    },
+    mounted() {
+      bus.$on(`app-drawer:go`, route => this.$router.push(route));
     }
   }
 </script>

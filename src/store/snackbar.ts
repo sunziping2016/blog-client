@@ -3,6 +3,7 @@ interface Message {
   action?: string;
   action_text?: string;
   action_class?: any;
+  action_data?: any;
   timeout?: number;
 }
 

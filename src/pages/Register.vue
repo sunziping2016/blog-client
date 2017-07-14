@@ -1,10 +1,10 @@
 <template>
-  <h3>你好，世界</h3>
+  <h3>注册</h3>
 </template>
 
 <script>
   export default {
-    name: 'home'
+    name: 'register'
   };
 </script>
 

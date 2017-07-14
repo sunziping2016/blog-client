@@ -24,7 +24,7 @@
         snackbarSet: 'snackbarSet'
       }),
       handleClick() {
-        bus.$emit(`app-snackbar:${this.message.action}`);
+        bus.$emit(`app-snackbar:${this.message.action}`, this.message.action_data);
       }
     },
     computed: {
@@ -42,7 +42,8 @@
           return this.$store.state.snackbar.snackbar;
         },
         set(value: boolean): void {
-          this.snackbarSet(value);
+          if (value !== this.snackbar)
+            this.snackbarSet(value);
         }
       }
     },

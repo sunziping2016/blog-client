@@ -13,6 +13,8 @@ declare global {
   const System: System;
 }
 
+let Home = () => System.import('./Home.vue');
+let Register = () => System.import('./Register.vue');
 let NotFound = () => System.import('./NotFound.vue');
 
 Vue.use(Router);
@@ -22,6 +24,16 @@ export default new Router({
   routes: [
     {
       path: '/(index.html)?',
+      name: 'home',
+      component: Home
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: Register
+    },
+    {
+      path: '*',
       name: 'notFound',
       component: NotFound
     }
