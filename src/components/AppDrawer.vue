@@ -2,16 +2,17 @@
   <v-navigation-drawer persistent light enable-resize-watcher
                        :mini-variant.sync="mini" v-model="drawer" overflow>
     <v-list three-line>
-      <v-list-tile avatar tag="div">
-        <v-list-tile-avatar>
-          <img src="https://randomuser.me/api/portraits/men/85.jpg" />
+      <v-list-tile avatar tag="div" :class="{'has-not-user': !user}">
+        <v-list-tile-avatar v-if="user">
+          <img v-if="user.avatar" :src="user.avatar">
+          <icon v-else name="user-circle-o" scale="2"></icon>
         </v-list-tile-avatar>
-        <v-list-tile-content>
-          <v-list-tile-title>John Leider</v-list-tile-title>
+        <v-list-tile-content v-if="user">
+          <v-list-tile-title :title="user.email">{{user.nickname || user.email}}</v-list-tile-title>
         </v-list-tile-content>
         <v-list-tile-action>
           <v-btn icon @click.native.stop="mini = !mini">
-            <v-icon>chevron_left</v-icon>
+            <v-icon>{{ `chevron_${mini ? 'right' : 'left'}` }}</v-icon>
           </v-btn>
         </v-list-tile-action>
       </v-list-tile>
@@ -34,13 +35,14 @@
 </template>
 
 <script lang="ts">
-  import bus from '@/event-bus.js';
+  import 'vue-awesome/icons/user-circle-o';
+  import bus from '@/event-bus';
 
   export default {
     computed: {
       drawer: {
         get(): boolean {
-          return this.$store.state.drawer.drawer;
+          return this.$store.state.appshell.drawer;
         },
         set(value: boolean): void {
           if (value !== this.drawer)
@@ -49,7 +51,7 @@
       },
       mini: {
         get(): boolean {
-          return this.$store.state.drawer.mini;
+          return this.$store.state.appshell.drawerMini;
         },
         set(value: boolean): void {
           if (value !== this.mini)
@@ -57,7 +59,10 @@
         }
       },
       items() {
-        return this.$store.state.drawer.items;
+        return this.$store.state.appshell.drawerItems;
+      },
+      user () {
+        return this.$store.state.auth.user;
       }
     },
     methods: {
@@ -71,3 +76,11 @@
     }
   }
 </script>
+
+<style lang="stylus">
+  .has-not-user > div
+    justify-content flex-end
+
+  .avatar .fa-icon
+    color rgba(0,0,0,0.54)!important
+</style>

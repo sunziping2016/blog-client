@@ -32,14 +32,14 @@
         return _extend({
           content: '',
           action: 'close',
-          action_text: 'Close',
+          action_text: '关闭',
           action_class: 'pink--text',
           timeout: 6000
-        }, this.$store.state.snackbar.snackbar_messages[0]);
+        }, this.$store.state.appshell.snackbarMessages[0]);
       },
       snackbar: {
         get(): boolean {
-          return this.$store.state.snackbar.snackbar;
+          return this.$store.state.appshell.snackbar;
         },
         set(value: boolean): void {
           if (value !== this.snackbar)
@@ -59,7 +59,7 @@
         this.snackbarSet(false);
         setTimeout(() => location.reload(), 400);
       });
-      this.$store.watch(state => state.app.new_version_available, value => {
+      this.$store.watch(state => state.appshell.newVersionAvailable, value => {
         this.$store.commit('snackbarAddMessage', {
           content: '已更新至最新版本',
           action: 'refresh',

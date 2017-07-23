@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
     "sourceMap": true,
-    "module": "es2015",
+    "module": "es6",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "lib": [
       "dom",
       "es5",
+      "es2015.core",
       "es2015.promise"
     ],
     "baseUrl": ".",
@@ -14,7 +15,10 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": [
+  "filesGlob": [
     "./src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

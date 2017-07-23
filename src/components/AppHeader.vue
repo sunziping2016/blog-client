@@ -7,23 +7,17 @@
     <v-btn icon>
       <v-icon>search</v-icon>
     </v-btn>
-    <v-btn icon>
-      <v-icon>apps</v-icon>
-    </v-btn>
-    <v-btn icon>
-      <v-icon>refresh</v-icon>
-    </v-btn>
-    <v-btn icon>
-      <v-icon>more_vert</v-icon>
+    <v-btn icon @click.native.stop="$store.commit('loginDialogSet', true)">
+      <icon name="sign-in" scale="1.5"></icon>
     </v-btn>
   </v-toolbar>
 </template>
 
 <script>
   import {mapState} from 'vuex';
+  import 'vue-awesome/icons/sign-in';
 
-  export default {
-  };
+  export default {};
 </script>
 
 <style lang="stylus" scoped>

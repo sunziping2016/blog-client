@@ -14,7 +14,7 @@ let webpackConfig = merge(baseWebpackConfig, {
   output: {
     path: path.resolve(__dirname, '../dist'),
     filename: 'static/js/[name].[chunkhash].js',
-    chunkFilename: 'statuc/js/[id].[chunkhash].js'
+    chunkFilename: 'static/js/[id].[chunkhash].js'
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html

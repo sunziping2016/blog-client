@@ -1,11 +1,12 @@
 <template>
   <v-app id="app">
+    <login-dialog></login-dialog>
     <app-drawer></app-drawer>
     <app-header></app-header>
     <main>
-      <v-container fluid>
+      <transition name="slide-y" mode="out-in">
         <router-view></router-view>
-      </v-container>
+      </transition>
     </main>
     <app-snackbar></app-snackbar>
   </v-app>
@@ -13,8 +14,7 @@
 
 <script lang="ts">
   import bus from '@/event-bus';
-  export default {
-  };
+  export default {};
 </script>
 
 <style lang="stylus">
@@ -22,7 +22,14 @@
 
   html
     overflow-y hidden!important
-</style>
 
-<style lang="stylus" scoped>
+  input:-webkit-autofill
+    -webkit-box-shadow 0 0 0 30px white inset;
+
+  .slide-y
+    &-enter-active, &-leave-active
+      transition $primary-transition
+    &-enter, &-leave-to
+      opacity 0
+      transform translateY(40px)
 </style>
