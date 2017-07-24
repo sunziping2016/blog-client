@@ -2,13 +2,13 @@
   <v-navigation-drawer persistent light enable-resize-watcher
                        :mini-variant.sync="mini" v-model="drawer" overflow>
     <v-list three-line>
-      <v-list-tile avatar tag="div" :class="{'has-not-user': !user}">
-        <v-list-tile-avatar v-if="user">
-          <img v-if="user.avatar" :src="user.avatar">
+      <v-list-tile avatar tag="div" click_if>
+        <v-list-tile-avatar>
+          <img v-if="user && user.avatar" :src="user.avatar">
           <icon v-else name="user-circle-o" scale="2"></icon>
         </v-list-tile-avatar>
-        <v-list-tile-content v-if="user">
-          <v-list-tile-title :title="user.email">{{user.nickname || user.email}}</v-list-tile-title>
+        <v-list-tile-content>
+          <v-list-tile-title>{{user ? user.nickname || user.email : '登录'}}</v-list-tile-title>
         </v-list-tile-content>
         <v-list-tile-action>
           <v-btn icon @click.native.stop="mini = !mini">
@@ -19,17 +19,22 @@
     </v-list>
     <v-list>
       <v-divider></v-divider>
-      <component v-for="item, row in items"
-                 :key="item.action || `action-${row}`"
-                 :is="item.type || 'v-list-tile'"
-                 @click.native.stop='handleClick(item)'>
-        <v-list-tile-action v-if="!item.type || item.type === 'v-list-tile'">
-          <v-icon>{{ item.icon }}</v-icon>
+      <v-list-tile exact to="/">
+        <v-list-tile-action>
+          <v-icon>home</v-icon>
         </v-list-tile-action>
-        <v-list-tile-content v-if="!item.type || item.type === 'v-list-tile'">
-          <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+        <v-list-tile-content>
+          <v-list-tile-title>主页</v-list-tile-title>
         </v-list-tile-content>
-      </component>
+      </v-list-tile>
+      <v-list-tile exact to="/register">
+        <v-list-tile-action>
+          <v-icon>account_circle</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-content>
+          <v-list-tile-title>注册</v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
     </v-list>
   </v-navigation-drawer>
 </template>
@@ -58,9 +63,6 @@
             this.$store.commit('drawerSetMini', value);
         }
       },
-      items() {
-        return this.$store.state.appshell.drawerItems;
-      },
       user () {
         return this.$store.state.auth.user;
       }
@@ -78,9 +80,6 @@
 </script>
 
 <style lang="stylus">
-  .has-not-user > div
-    justify-content flex-end
-
   .avatar .fa-icon
     color rgba(0,0,0,0.54)!important
 </style>

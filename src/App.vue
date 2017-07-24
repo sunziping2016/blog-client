@@ -4,9 +4,15 @@
     <app-drawer></app-drawer>
     <app-header></app-header>
     <main>
-      <transition name="slide-y" mode="out-in">
-        <router-view></router-view>
-      </transition>
+      <v-container fluid>
+        <transition
+          appear name="slide-y" mode="out-in"
+          @before-leave="beforeLeave"
+          @before-enter="beforeEnter"
+        >
+          <router-view ref="content"></router-view>
+        </transition>
+      </v-container>
     </main>
     <app-snackbar></app-snackbar>
   </v-app>
@@ -14,14 +20,60 @@
 
 <script lang="ts">
   import bus from '@/event-bus';
-  export default {};
+
+  export default {
+    data() {
+      return {
+        resetScroll: () => this.scrollTo(this.positions[this.prevFullPath])
+      }
+    },
+    computed: {
+      positions() {
+        return this.$store.state.appshell.savedPosition;
+      },
+      prevFullPath() {
+        return this.$store.state.appshell.previousFullPath;
+      }
+    },
+    methods: {
+      beforeLeave() {
+        window.addEventListener('scroll', this.resetScroll);
+      },
+      beforeEnter() {
+        this.$nextTick(() => {
+          window.removeEventListener('scroll', this.resetScroll);
+          this.scrollTo(this.positions[this.$route.fullPath]);
+          this.$store.commit('clearSavedPosition');
+        })
+      },
+      scrollTo(pos) {
+        if (!pos)
+          return;
+        if (pos.selector) {
+          const el = document.querySelector(pos.selector);
+          if (el) {
+            let offset = pos.offset ? pos.offset : {};
+            const docEl = document.documentElement;
+            const docRect = docEl.getBoundingClientRect();
+            const elRect = el.getBoundingClientRect();
+            window.scrollTo(
+              elRect.left - docRect.left - (offset.x || 0),
+              elRect.top - docRect.top - (offset.y || 0)
+            );
+            return;
+          }
+        }
+        window.scrollTo(pos.x || 0, pos.y || 0);
+      }
+    }
+  };
 </script>
 
 <style lang="stylus">
   @import './assets/styles/global'
 
   html
-    overflow-y hidden!important
+    overflow-y auto!important
 
   input:-webkit-autofill
     -webkit-box-shadow 0 0 0 30px white inset;

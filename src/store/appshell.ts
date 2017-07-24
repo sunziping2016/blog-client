@@ -18,15 +18,14 @@ interface DrawerItem {
 class State {
   newVersionAvailable = false;
 
+  savedPosition: {[path:string]: { x: number, y: number } | { selector: string }} = {};
+  previousFullPath: string = '';
+
   snackbar: boolean = false;
   snackbarMessages: Array<Message> = [];
 
   drawer: boolean = false;
   drawerMini: boolean = false;
-  drawerItems: Array<DrawerItem> = [
-    { title: 'Home', icon: 'dashboard', action: 'go', action_data: '/'},
-    { title: 'About', icon: 'question_answer', action: 'go', action_data: '/register'}
-  ];
 
   loginDialog: boolean = false;
 }
@@ -36,6 +35,16 @@ const state = new State();
 const mutations = {
   newVersionAvailable(state: State) {
     state.newVersionAvailable = true;
+  },
+  addSavedPosition(state: State, {path, position}:
+    {path: string, position: { x: number, y: number } | { selector: string }}): void {
+    state.savedPosition[path] = position;
+  },
+  clearSavedPosition(state: State): void {
+    state.savedPosition = {};
+  },
+  setPreviousFullPath(state: State, path:string): void {
+    state.previousFullPath = path;
   },
   snackbarAddMessage(state: State, message: string | Message): void {
     if (typeof message !== 'object')
@@ -53,12 +62,6 @@ const mutations = {
   },
   drawerSet(state: State, value: boolean): void {
     state.drawer = value;
-  },
-  drawerToggle(state: State): void {
-    state.drawer = !state.drawer;
-  },
-  drawerSetItems(state: State, items: Array<DrawerItem>): void {
-    state.drawerItems = items;
   },
   drawerSetMini(state: State, mini: boolean): void {
     state.drawerMini = mini;

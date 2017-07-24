@@ -1,14 +1,11 @@
 <template>
   <v-toolbar fixed dark class="primary">
-    <v-toolbar-side-icon @click.native.stop="$store.commit('drawerToggle')">
+    <v-toolbar-side-icon @click.native.stop="$store.commit('drawerSet', !$store.state.appshell.drawer)">
     </v-toolbar-side-icon>
     <v-toolbar-title class="white--text">Title</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-btn icon>
       <v-icon>search</v-icon>
-    </v-btn>
-    <v-btn icon @click.native.stop="$store.commit('loginDialogSet', true)">
-      <icon name="sign-in" scale="1.5"></icon>
     </v-btn>
   </v-toolbar>
 </template>

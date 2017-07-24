@@ -1,23 +1,28 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import store from '@/store';
 
-/*
- * Workaround for TypeScript issue #12364
- * https://github.com/Microsoft/TypeScript/issues/12364
- */
-declare global {
-  interface System {
-    //noinspection ReservedWordAsName
-    import (request: string): Promise<any>
-  }
-  const System: System;
-}
-
-let Home = () => System.import('./Home.vue');
-let Register = () => System.import('./Register.vue');
-let NotFound = () => System.import('./NotFound.vue');
+let Home = resolve => (<any>require).ensure(['./Home.vue'], () => resolve(require('./Home.vue')));
+let Register = resolve => (<any>require).ensure(['./Register.vue'], () => resolve(require('./Register.vue')));
+let NotFound = resolve => (<any>require).ensure(['./NotFound.vue'], () => resolve(require('./NotFound.vue')));
 
 Vue.use(Router);
+
+function scrollBehavior(to, from, savedPosition) {
+  let rootEqual = to.matched[0].components === from.matched[0].components, position = savedPosition;
+  if (!position) {
+    position = {};
+    if (to.hash)
+      position.selector = to.hash;
+  }
+  if (rootEqual)
+    return position;
+  store.commit('addSavedPosition', {
+    path: to.fullPath,
+    position
+  });
+  return false;
+}
 
 export default new Router({
   mode: 'history',
@@ -30,13 +35,19 @@ export default new Router({
     {
       path: '/register',
       name: 'register',
-      component: Register
+      component: Register,
+      meta: {requiresNoLogin: true}
+    },
+    {
+      path: '/404',
+      name: 'notFound',
+      component: NotFound
     },
     {
       path: '*',
-      name: 'notFound',
-      component: NotFound
+      redirect: '/'
     }
-  ]
+  ],
+  scrollBehavior
 });
 

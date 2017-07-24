@@ -21,13 +21,58 @@ if (localStorage['feathers-jwt'])
     accessToken: localStorage['feathers-jwt']
   }).catch(error => localStorage.removeItem('feathers-jwt'));
 
-(<any>window).feathersClient = feathersClient;
-
 let app = new Vue({
   router,
   store,
-  ...(App as any)
+  data: {
+    title: "孙子平的博客"
+  },
+  methods: {
+    updateTitle() {
+      let metaTitle = this.$store.state.route.meta.title;
+      if (metaTitle)
+        document.title = metaTitle  + ' - ' + (<any>this).title;
+      else
+        document.title = (<any>this).title;
+    },
+  },
+  mounted() {
+    if (!checkRouter(this.$store.state.route))
+      router.push('/');
+    this.$watch('state', () => {
+      if (!checkRouter(this.$store.state.route))
+        router.push('/');
+    });
+  },
+  mixins: [App]
 });
 
+function checkRouter(page) {
+  let user = app.$store.state.auth.user;
+  if (page.meta.requiresLogin && !user)
+    return false;
+  if (page.meta.requiresNoLogin && user)
+    return false;
+  //noinspection RedundantIfStatementJS
+  if (page.meta.requiresAdmin && (!user || user.role !== 'Administrator'))
+    return false;
+  return true;
+}
+
+router.beforeEach((to, from, next) => {
+  store.commit('addSavedPosition', {
+    path: from.fullPath,
+    position: {x: window.pageXOffset, y: window.pageYOffset}
+  });
+  store.commit('setPreviousFullPath', from.fullPath);
+  if (!checkRouter(to))
+    next(false);
+  else
+    next();
+});
+router.afterEach((to, from) => {
+  (<any>app).updateTitle();
+});
 router.onReady(() => app.$mount('#app'));
+(<any>window).feathersClient = feathersClient;
 (<any>window).app = app;

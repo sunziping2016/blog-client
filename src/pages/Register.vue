@@ -1,48 +1,46 @@
 <template>
-  <v-container fluid>
-    <!-- Fake elements -->
-    <input class="fake-input" type="email">
-    <input class="fake-input" type="password">
-    <v-stepper :value="step" vertical non-linear>
-      <v-stepper-step step="1" :complete="step > 1">注册</v-stepper-step>
-      <v-stepper-content step="1">
-        <v-text-field
-          label="邮箱"
-          type="email"
-          v-model="email"
-          @keyup.native.enter="onRegister"
-          :error-messages="emailError ? [emailError] : []"
-        ></v-text-field>
-        <v-text-field
-          label="密码"
-          v-model="password"
-          @keyup.native.enter="onRegister"
-          :error-messages="passwordError ? [passwordError] : []"
-          :append-icon="passwordVisible ? 'visibility_off' : 'visibility'"
-          :append-icon-cb="() => (passwordVisible = !passwordVisible)"
-          :type="passwordVisible ? 'text' : 'password'"
-        ></v-text-field>
-        <v-btn flat @click.native="$router.back()">取消</v-btn>
-        <v-btn primary
-               :disabled="!registerValid"
-               @click.native="onRegister">
-          注册
-        </v-btn>
-      </v-stepper-content>
-      <v-stepper-step step="2" :complete="step > 2">验证邮箱</v-stepper-step>
-      <v-stepper-content step="2">
-        <v-card class="grey lighten-1 z-depth-1 mb-5" height="200px"></v-card>
-        <v-btn primary>Continue</v-btn>
-        <v-btn flat>取消</v-btn>
-      </v-stepper-content>
-      <v-stepper-step step="3">完成</v-stepper-step>
-      <v-stepper-content step="3">
-        <v-card class="grey lighten-1 z-depth-1 mb-5" height="200px"></v-card>
-        <v-btn primary>Continue</v-btn>
-        <v-btn flat>Cancel</v-btn>
-      </v-stepper-content>
-    </v-stepper>
-  </v-container>
+  <v-stepper :value="step" vertical non-linear>
+    <v-stepper-step step="1" :complete="step > 1">注册</v-stepper-step>
+    <v-stepper-content step="1">
+      <!-- Fake elements -->
+      <input class="fake-input" type="email">
+      <input class="fake-input" type="password">
+      <v-text-field
+        label="邮箱"
+        type="email"
+        v-model="email"
+        @keyup.native.enter="onRegister"
+        :error-messages="emailError ? [emailError] : []"
+      ></v-text-field>
+      <v-text-field
+        label="密码"
+        v-model="password"
+        @keyup.native.enter="onRegister"
+        :error-messages="passwordError ? [passwordError] : []"
+        :append-icon="passwordVisible ? 'visibility_off' : 'visibility'"
+        :append-icon-cb="() => (passwordVisible = !passwordVisible)"
+        :type="passwordVisible ? 'text' : 'password'"
+      ></v-text-field>
+      <v-btn flat @click.native="$router.back()">取消</v-btn>
+      <v-btn primary
+             :disabled="!registerValid"
+             @click.native="onRegister">
+        注册
+      </v-btn>
+    </v-stepper-content>
+    <v-stepper-step step="2" :complete="step > 2">验证邮箱</v-stepper-step>
+    <v-stepper-content step="2">
+      <v-card class="grey lighten-1 z-depth-1 mb-5" height="200px"></v-card>
+      <v-btn primary>Continue</v-btn>
+      <v-btn flat>取消</v-btn>
+    </v-stepper-content>
+    <v-stepper-step step="3">完成</v-stepper-step>
+    <v-stepper-content step="3">
+      <v-card class="grey lighten-1 z-depth-1 mb-5" height="200px"></v-card>
+      <v-btn primary>Continue</v-btn>
+      <v-btn flat>Cancel</v-btn>
+    </v-stepper-content>
+  </v-stepper>
 </template>
 
 <script lang="ts">
@@ -87,6 +85,9 @@
         else
           this.passwordError = null;
       }
+    },
+    mounted() {
+      console.log('mounted');
     },
     methods: {
       onRegister: debounce(function () {
