@@ -36,10 +36,19 @@ let app = new Vue({
         document.title = (<any>this).title;
     },
   },
+  computed: {
+    user() {
+      return this.$store.state.auth.user;
+    }
+  },
   mounted() {
     if (!checkRouter(this.$store.state.route))
       router.push('/');
     this.$watch('state', () => {
+      if (!checkRouter(this.$store.state.route))
+        router.push('/');
+    });
+    this.$watch('user', () => {
       if (!checkRouter(this.$store.state.route))
         router.push('/');
     });

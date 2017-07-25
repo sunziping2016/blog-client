@@ -21,7 +21,7 @@
         :append-icon-cb="() => (passwordVisible = !passwordVisible)"
         :type="passwordVisible ? 'text' : 'password'"
       ></v-text-field>
-      <v-btn flat @click.native="$router.back()">取消</v-btn>
+      <v-btn @click.native="$router.back()">取消</v-btn>
       <v-btn primary
              :disabled="!registerValid"
              @click.native="onRegister">
@@ -31,23 +31,23 @@
     <v-stepper-step :step="2" :complete="step > 2">验证邮箱</v-stepper-step>
     <v-stepper-content :step="2">
       <p v-if="sending">我们正在向您的邮箱发送验证邮件。</p>
-      <p v-else>我们已经向您的邮箱发送了验证邮件。</p>
-
-      <v-btn flat @click.native="step = 1">取消</v-btn>
+      <p v-else-if="!!sendTime">我们已经向您的邮箱发送了验证邮件。</p>
+      <p v-else>点击“发送”按钮发送验证邮件。</p>
+      <v-btn @click.native="step = 1; id = null; sendTime = null">取消</v-btn>
       <v-btn
         primary
         :loading="!!(sending || resendRemainingTime)"
         :disabled="!!(sending || resendRemainingTime)"
         class="resend-btn"
         @click.native="onSend">
-        重新发送
-        <span slot="loader">{{sending ? '发送中...' : `${Math.round(resendRemainingTime / 1000)}秒后可重发`}}</span>
+        {{sendTime ? '重新发送' : '发送'}}
+        <span slot="loader">{{sending ? '发送中...' : `${Math.round(resendRemainingTime / 1000)}秒后重发`}}</span>
       </v-btn>
     </v-stepper-content>
     <v-stepper-step :step="3">完成</v-stepper-step>
     <v-stepper-content :step="3">
-      <p>恭喜您，完成注册！请进入设置完善个人信息。</p>
-      <v-btn primary @click.native="$router.push('/settings')">进入设置</v-btn>
+      <p>您已完成注册！登录后会跳回主页。</p>
+      <v-btn primary @click.native="login">登录</v-btn>
     </v-stepper-content>
   </v-stepper>
 </template>
@@ -72,6 +72,7 @@
         emailError: null,
         passwordError: null,
         id: null,
+        sendTime: null,
         subscription: null,
         sending: false,
         resendRemainingTime: 0,
@@ -85,9 +86,6 @@
       },
       user() {
         return this.id && this.$store.getters["users/get"](this.id);
-      },
-      sendTime() {
-        return this.user && this.user.verificationSendAt ? new Date(this.user.verificationSendAt).getTime() : null;
       },
       authUser() {
         return this.$store.state.auth.user;
@@ -121,18 +119,8 @@
       user() {
         if (this.user && this.user.verified && this.step !== 3) {
           this.step = 3;
-          if (!this.authUser)
-            this.authenticate({
-              strategy: 'local',
-              email: this.email,
-              password: this.password,
-            }).catch(err => this.snackbarAddMessage(err.message));
         }
       },
-      authUser() {
-        if (this.authUser && this.step !== 3)
-          this.step = 3;
-      }
     },
     methods: {
       refreshRemainingTime() {
@@ -150,12 +138,12 @@
           return;
         if (this.subscription)
           this.subscription.unsubscribe();
-
-
         this.subscription = (<any>client).service('users').create({
             email: this.email,
             password: this.password
         }).subscribe(user => {
+          if (!user._id)
+            return;
           this.$store.dispatch('users/addOrUpdate', user);
           if (this.id !== user._id) {
             this.id = user._id;
@@ -181,18 +169,29 @@
         this.clearPatchError();
         this.sending = true;
         this.$store.dispatch('users/patch', [this.id, {}, paramsForServer({validation: 1})])
+          .then(user => {
+            this.$store.dispatch('users/addOrUpdate', user);
+            this.sendTime = Date.now();
+          })
           .catch(err => this.snackbarAddMessage(err.message))
           .then(() => this.sending = false);
       }, 300, {leading: true}),
+      login() {
+        this.subscription.unsubscribe();
+        this.subscription = null;
+        this.authenticate({
+          strategy: 'local',
+          email: this.email,
+          password: this.password,
+        }).catch(err => this.snackbarAddMessage(err.message));
+      },
       updateRoute() {
-        if (this.authUser)
-          this.step = 3;
-        else if (this.user)
+        if (this.user)
           this.step = 2;
         else
           this.step = 1;
       },
-      ...mapMutations('users', {clearCreateError: 'clearCreateError', clearPatchError: 'clearPatchError'}),
+      ...mapMutations('users', {clearPatchError: 'clearPatchError'}),
       ...mapMutations(['snackbarAddMessage']),
       ...mapActions('auth', ['authenticate'])
     }
@@ -206,6 +205,4 @@
     display none
   .container
     max-width: 600px
-  .resend-btn
-    min-width: 112px
 </style>

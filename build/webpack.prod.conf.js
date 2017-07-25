@@ -68,8 +68,6 @@ let webpackConfig = merge(baseWebpackConfig, {
       ],
       mergeStaticsConfig: true,
       stripPrefix: 'dist/',
-      navigateFallback: '/index.html',
-      navigateFallbackWhitelist: [/^(?!.*\.html$).*/],
       minify: true,
       runtimeCaching: [
       ]
