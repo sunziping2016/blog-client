@@ -24,7 +24,7 @@ class State {
   snackbar: boolean = false;
   snackbarMessages: Array<Message> = [];
 
-  drawer: boolean = false;
+  drawer: boolean = window.innerWidth > 1024;
   drawerMini: boolean = false;
 
   loginDialog: boolean = false;

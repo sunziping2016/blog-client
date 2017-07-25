@@ -86,8 +86,10 @@
           return;
         this.clearAuthenticateError();
         this.authenticate({strategy: 'local', email: this.email, password: this.password})
-          .then(() => this.snackbarAddMessage('成功登录！'))
-          .catch(error => {
+          .then(() => {
+            this.snackbarAddMessage('成功登录！');
+            this.dialog = false;
+          }).catch(error => {
             switch (error.message) {
               case 'Invalid login':
                 this.passwordError = '用户名或密码错误';
@@ -96,7 +98,6 @@
                 this.snackbarAddMessage(error.message);
             }
           })
-          .then(() => this.dialog = false);
       }, 300, {leading: true}),
       ...mapMutations('auth', {clearAuthenticateError: 'clearAuthenticateError'}),
       ...mapActions('auth', ['authenticate']),

@@ -1,8 +1,9 @@
 <template>
-  <v-navigation-drawer persistent light enable-resize-watcher
-                       :mini-variant.sync="mini" v-model="drawer" overflow>
+  <v-navigation-drawer
+    persistent light enable-resize-watcher
+    :mini-variant.sync="mini" v-model="drawer" overflow>
     <v-list three-line>
-      <v-list-tile avatar tag="div" click_if>
+      <v-list-tile avatar tag="div" @click.native.stop="onUserClick">
         <v-list-tile-avatar>
           <img v-if="user && user.avatar" :src="user.avatar">
           <icon v-else name="user-circle-o" scale="2"></icon>
@@ -72,18 +73,20 @@
             this.$store.commit('drawerSetMini', value);
         }
       },
-      user () {
+      user() {
         return this.$store.state.auth.user;
       }
     },
     methods: {
-      handleClick(item) {
-        if (item.action)
-          bus.$emit(`app-drawer:${item.action}`, item.action_data);
+      onUserClick() {
+        if (this.user)
+          this.$router.push('/settings');
+        else {
+          if (window.innerWidth <= 1024)
+            this.drawer = false;
+          this.$store.commit('loginDialogSet', true);
+        }
       }
-    },
-    mounted() {
-      bus.$on(`app-drawer:go`, route => this.$router.push(route));
     }
   }
 </script>

@@ -1,55 +1,57 @@
 <template>
-  <v-stepper :value="step" vertical>
-    <v-stepper-step :step="1" :complete="step > 1">注册</v-stepper-step>
-    <v-stepper-content :step="1">
-      <!-- Fake elements -->
-      <input class="fake-input" type="email">
-      <input class="fake-input" type="password">
-      <v-text-field
-        label="邮箱"
-        type="email"
-        v-model="email"
-        @keyup.native.enter="onRegister"
-        :error-messages="emailError ? [emailError] : []"
-      ></v-text-field>
-      <v-text-field
-        label="密码"
-        v-model="password"
-        @keyup.native.enter="onRegister"
-        :error-messages="passwordError ? [passwordError] : []"
-        :append-icon="passwordVisible ? 'visibility_off' : 'visibility'"
-        :append-icon-cb="() => (passwordVisible = !passwordVisible)"
-        :type="passwordVisible ? 'text' : 'password'"
-      ></v-text-field>
-      <v-btn @click.native="$router.back()">取消</v-btn>
-      <v-btn primary
-             :disabled="!registerValid"
-             @click.native="onRegister">
-        注册
-      </v-btn>
-    </v-stepper-content>
-    <v-stepper-step :step="2" :complete="step > 2">验证邮箱</v-stepper-step>
-    <v-stepper-content :step="2">
-      <p v-if="sending">我们正在向您的邮箱发送验证邮件。</p>
-      <p v-else-if="!!sendTime">我们已经向您的邮箱发送了验证邮件。</p>
-      <p v-else>点击“发送”按钮发送验证邮件。</p>
-      <v-btn @click.native="step = 1; id = null; sendTime = null">取消</v-btn>
-      <v-btn
-        primary
-        :loading="!!(sending || resendRemainingTime)"
-        :disabled="!!(sending || resendRemainingTime)"
-        class="resend-btn"
-        @click.native="onSend">
-        {{sendTime ? '重新发送' : '发送'}}
-        <span slot="loader">{{sending ? '发送中...' : `${Math.round(resendRemainingTime / 1000)}秒后重发`}}</span>
-      </v-btn>
-    </v-stepper-content>
-    <v-stepper-step :step="3">完成</v-stepper-step>
-    <v-stepper-content :step="3">
-      <p>您已完成注册！登录后会跳回主页。</p>
-      <v-btn primary @click.native="login">登录</v-btn>
-    </v-stepper-content>
-  </v-stepper>
+  <v-layout row justify-space-around>
+    <v-stepper :value="step" vertical class="register-panel">
+      <v-stepper-step :step="1" :complete="step > 1">注册</v-stepper-step>
+      <v-stepper-content :step="1">
+        <!-- Fake elements -->
+        <input class="fake-input" type="email">
+        <input class="fake-input" type="password">
+        <v-text-field
+          label="邮箱"
+          type="email"
+          v-model="email"
+          @keyup.native.enter="onRegister"
+          :error-messages="emailError ? [emailError] : []"
+        ></v-text-field>
+        <v-text-field
+          label="密码"
+          v-model="password"
+          @keyup.native.enter="onRegister"
+          :error-messages="passwordError ? [passwordError] : []"
+          :append-icon="passwordVisible ? 'visibility_off' : 'visibility'"
+          :append-icon-cb="() => (passwordVisible = !passwordVisible)"
+          :type="passwordVisible ? 'text' : 'password'"
+        ></v-text-field>
+        <v-btn @click.native="$router.back()">取消</v-btn>
+        <v-btn primary
+               :disabled="!registerValid"
+               @click.native="onRegister">
+          注册
+        </v-btn>
+      </v-stepper-content>
+      <v-stepper-step :step="2" :complete="step > 2">验证邮箱</v-stepper-step>
+      <v-stepper-content :step="2">
+        <p v-if="sending">我们正在向您的邮箱发送验证邮件。</p>
+        <p v-else-if="!!sendTime">我们已经向您的邮箱发送了验证邮件。</p>
+        <p v-else>点击“发送”按钮发送验证邮件。</p>
+        <v-btn @click.native="cancel">取消</v-btn>
+        <v-btn
+          primary
+          :loading="!!(sending || resendRemainingTime)"
+          :disabled="!!(sending || resendRemainingTime)"
+          class="resend-btn"
+          @click.native="onSend">
+          {{sendTime ? '重新发送' : '发送'}}
+          <span slot="loader">{{sending ? '发送中...' : `${Math.round(resendRemainingTime / 1000)}秒后重发`}}</span>
+        </v-btn>
+      </v-stepper-content>
+      <v-stepper-step :step="3">完成</v-stepper-step>
+      <v-stepper-content :step="3">
+        <p>您已完成注册！登录后会跳回主页。</p>
+        <v-btn primary @click.native="login">登录</v-btn>
+      </v-stepper-content>
+    </v-stepper>
+  </v-layout>
 </template>
 
 <script lang="ts">
@@ -123,6 +125,18 @@
       },
     },
     methods: {
+      cancel() {
+        if (this.id)
+          this.$store.dispatch('users/remove', this.id)
+            .catch(err => this.snackbarAddMessage(err.message));
+        this.id = null;
+        this.sendTime = null;
+        if (this.subscription) {
+          this.subscription.unsubscribe();
+          this.subscription = null;
+        };
+        this.step = 1;
+      },
       refreshRemainingTime() {
         let now = Date.now();
         if (now - this.sendTime < mailsendTime) {
@@ -142,7 +156,7 @@
             email: this.email,
             password: this.password
         }).subscribe(user => {
-          if (!user._id)
+          if (!user || !user._id)
             return;
           this.$store.dispatch('users/addOrUpdate', user);
           if (this.id !== user._id) {
@@ -203,6 +217,7 @@
     font-size 16px
   .fake-input
     display none
-  .container
-    max-width: 600px
+  .register-panel
+    max-width 600px
+    flex-grow 1
 </style>

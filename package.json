@@ -34,6 +34,7 @@
     "socket.io-client": "^2.0.3",
     "vue": "^2.3.4",
     "vue-awesome": "^2.3.1",
+    "vue-dropzone": "^1.0.4",
     "vue-monaco-editor": "0.0.19",
     "vue-router": "^2.6.0",
     "vue2-dropzone": "^2.3.4",

@@ -8,18 +8,15 @@ import components from './components';
 import router from './pages';
 import store from './store';
 import { sync } from 'vuex-router-sync';
+import Dropzone from 'vue2-dropzone';
 import feathersClient from './feathers';
 
 FastClick.attach(document.body);
 sync(store, router);
 Vue.use(Vuetify);
 Vue.component('icon', Icon);
+Vue.component('dropzone', Dropzone);
 Object.keys(components).forEach(x => Vue.component(x, components[x]));
-if (localStorage['feathers-jwt'])
-  store.dispatch('auth/authenticate', {
-    strategy: 'jwt',
-    accessToken: localStorage['feathers-jwt']
-  }).catch(error => localStorage.removeItem('feathers-jwt'));
 
 let app = new Vue({
   router,
@@ -42,19 +39,20 @@ let app = new Vue({
     }
   },
   mounted() {
-    if (!checkRouter(this.$store.state.route))
-      router.push('/');
-    this.$watch('state', () => {
+    store.dispatch('auth/authenticate').catch(error => {
+      if (!error.message.includes('Could not find stored JWT'))
+        store.commit('snackbarAddMessage', error.message);
+    }).then(() => {
+      if (!checkRouter(this.$store.state.route))
+        router.push('/');
+    });
+    this.$watch('$route', () => {
       if (!checkRouter(this.$store.state.route))
         router.push('/');
     });
     this.$watch('user', () => {
       if (!checkRouter(this.$store.state.route))
         router.push('/');
-    });
-    this.$store.dispatch('auth/authenticate').catch(error => {
-      if (!error.message.includes('Could not find stored JWT'))
-        this.$store.commit('snackbarAddMessage', error.message);
     });
   },
   mixins: [App]
