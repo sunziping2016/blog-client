@@ -70,7 +70,7 @@
 </script>
 
 <style lang="stylus">
-  @import './assets/styles/global'
+  @import './assets/global'
 
   html
     overflow-y auto!important
