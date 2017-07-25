@@ -1,7 +1,7 @@
 <template>
-  <v-stepper :value="step" vertical non-linear>
-    <v-stepper-step step="1" :complete="step > 1">注册</v-stepper-step>
-    <v-stepper-content step="1">
+  <v-stepper :value="step" vertical>
+    <v-stepper-step :step="1" :complete="step > 1">注册</v-stepper-step>
+    <v-stepper-content :step="1">
       <!-- Fake elements -->
       <input class="fake-input" type="email">
       <input class="fake-input" type="password">
@@ -28,36 +28,54 @@
         注册
       </v-btn>
     </v-stepper-content>
-    <v-stepper-step step="2" :complete="step > 2">验证邮箱</v-stepper-step>
-    <v-stepper-content step="2">
-      <v-card class="grey lighten-1 z-depth-1 mb-5" height="200px"></v-card>
-      <v-btn primary>Continue</v-btn>
-      <v-btn flat>取消</v-btn>
+    <v-stepper-step :step="2" :complete="step > 2">验证邮箱</v-stepper-step>
+    <v-stepper-content :step="2">
+      <p v-if="sending">我们正在向您的邮箱发送验证邮件。</p>
+      <p v-else>我们已经向您的邮箱发送了验证邮件。</p>
+
+      <v-btn flat @click.native="step = 1">取消</v-btn>
+      <v-btn
+        primary
+        :loading="!!(sending || resendRemainingTime)"
+        :disabled="!!(sending || resendRemainingTime)"
+        class="resend-btn"
+        @click.native="onSend">
+        重新发送
+        <span slot="loader">{{sending ? '发送中...' : `${Math.round(resendRemainingTime / 1000)}秒后可重发`}}</span>
+      </v-btn>
     </v-stepper-content>
-    <v-stepper-step step="3">完成</v-stepper-step>
-    <v-stepper-content step="3">
-      <v-card class="grey lighten-1 z-depth-1 mb-5" height="200px"></v-card>
-      <v-btn primary>Continue</v-btn>
-      <v-btn flat>Cancel</v-btn>
+    <v-stepper-step :step="3">完成</v-stepper-step>
+    <v-stepper-content :step="3">
+      <p>恭喜您，完成注册！请进入设置完善个人信息。</p>
+      <v-btn primary @click.native="$router.push('/settings')">进入设置</v-btn>
     </v-stepper-content>
   </v-stepper>
 </template>
 
 <script lang="ts">
   import { mapMutations, mapActions, mapState } from 'vuex';
+  import { paramsForServer } from 'feathers-hooks-common';
   import debounce from 'lodash/debounce.js';
+  import client from '@/feathers';
 
   const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const mailsendTime = 60000;
 
   export default {
     name: 'register',
     data() {
       return {
+        step: 1,
         email: '',
         password: '',
         passwordVisible: false,
         emailError: null,
-        passwordError: null
+        passwordError: null,
+        id: null,
+        subscription: null,
+        sending: false,
+        resendRemainingTime: 0,
+        resendRemainingTimer: null,
       }
     },
     computed: {
@@ -65,10 +83,15 @@
         return this.email && this.password &&
           !this.emailError && !this.passwordError;
       },
-      step() {
-        return this.user ? (this.user.validated ? 3 : 2) : 1;
+      user() {
+        return this.id && this.$store.getters["users/get"](this.id);
       },
-      ...mapState('auth', ['user'])
+      sendTime() {
+        return this.user && this.user.verificationSendAt ? new Date(this.user.verificationSendAt).getTime() : null;
+      },
+      authUser() {
+        return this.$store.state.auth.user;
+      }
     },
     watch: {
       email() {
@@ -84,40 +107,92 @@
           this.passwordError = '密码长度至少为8';
         else
           this.passwordError = null;
+      },
+      sendTime() {
+        if (this.resendRemainingTimer) {
+          clearInterval(this.resendRemainingTimer);
+          this.resendRemainingTimer = null;
+        } if (this.sendTime) {
+          this.refreshRemainingTime();
+          this.resendRemainingTimer = setInterval(() => this.refreshRemainingTime(), 1000);
+        } else
+          this.resendRemainingTime = 0;
+      },
+      user() {
+        if (this.user && this.user.verified && this.step !== 3) {
+          this.step = 3;
+          if (!this.authUser)
+            this.authenticate({
+              strategy: 'local',
+              email: this.email,
+              password: this.password,
+            }).catch(err => this.snackbarAddMessage(err.message));
+        }
+      },
+      authUser() {
+        if (this.authUser && this.step !== 3)
+          this.step = 3;
       }
     },
-    mounted() {
-      console.log('mounted');
-    },
     methods: {
+      refreshRemainingTime() {
+        let now = Date.now();
+        if (now - this.sendTime < mailsendTime) {
+          this.resendRemainingTime = mailsendTime - (now - this.sendTime);
+        } else {
+          clearInterval(this.resendRemainingTimer);
+          this.resendRemainingTimer = null;
+          this.resendRemainingTime = 0;
+        }
+      },
       onRegister: debounce(function () {
         if (!this.registerValid)
           return;
-        this.clearCreateError();
-        this.createUser({email: this.email, password: this.password})
-          .then(response => this.authenticate({
-            strategy: 'local',
+        if (this.subscription)
+          this.subscription.unsubscribe();
+
+
+        this.subscription = (<any>client).service('users').create({
             email: this.email,
             password: this.password
-          }))
-          .then(() => this.snackbarAddMessage('注册成功'))
-          .catch(error => {
-            let errorResolved = false;
-            if (error.errors && !Array.isArray(error.errors)) {
-              for (let name in error.errors) {
-                if (error.errors.hasOwnProperty(name) && name === 'email'
-                  && error.errors[name] === 'Email already taken') {
-                  this.emailError = '邮箱已被注册';
-                  errorResolved = true;
-                }
+        }).subscribe(user => {
+          this.$store.dispatch('users/addOrUpdate', user);
+          if (this.id !== user._id) {
+            this.id = user._id;
+            this.step = 2;
+            this.onSend();
+          }
+        }, error => {
+          let errorResolved = false;
+          if (error.errors && !Array.isArray(error.errors)) {
+            for (let name in error.errors) {
+              if (error.errors.hasOwnProperty(name) && name === 'email'
+                && error.errors[name] === 'Email already taken') {
+                this.emailError = '邮箱已被注册';
+                errorResolved = true;
               }
             }
-            if (!errorResolved)
-              this.snackbarAddMessage(error.message);
-          });
+          }
+          if (!errorResolved)
+            this.snackbarAddMessage(error.message);
+        });
       }, 300, {leading: true}),
-      ...mapActions('users', {createUser: 'create'}),
-      ...mapMutations('users', {clearCreateError: 'clearCreateError'}),
+      onSend: debounce(function () {
+        this.clearPatchError();
+        this.sending = true;
+        this.$store.dispatch('users/patch', [this.id, {}, paramsForServer({validation: 1})])
+          .catch(err => this.snackbarAddMessage(err.message))
+          .then(() => this.sending = false);
+      }, 300, {leading: true}),
+      updateRoute() {
+        if (this.authUser)
+          this.step = 3;
+        else if (this.user)
+          this.step = 2;
+        else
+          this.step = 1;
+      },
+      ...mapMutations('users', {clearCreateError: 'clearCreateError', clearPatchError: 'clearPatchError'}),
       ...mapMutations(['snackbarAddMessage']),
       ...mapActions('auth', ['authenticate'])
     }
@@ -131,4 +206,6 @@
     display none
   .container
     max-width: 600px
+  .resend-btn
+    min-width: 112px
 </style>

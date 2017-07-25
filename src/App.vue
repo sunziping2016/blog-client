@@ -10,7 +10,9 @@
           @before-leave="beforeLeave"
           @before-enter="beforeEnter"
         >
-          <router-view ref="content"></router-view>
+          <keep-alive include="register">
+            <router-view></router-view>
+          </keep-alive>
         </transition>
       </v-container>
     </main>

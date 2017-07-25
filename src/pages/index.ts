@@ -5,6 +5,7 @@ import store from '@/store';
 let Home = resolve => (<any>require).ensure(['./Home.vue'], () => resolve(require('./Home.vue')));
 let Register = resolve => (<any>require).ensure(['./Register.vue'], () => resolve(require('./Register.vue')));
 let NotFound = resolve => (<any>require).ensure(['./NotFound.vue'], () => resolve(require('./NotFound.vue')));
+let Settings = resolve => (<any>require).ensure(['./Settings.vue'], () => resolve(require('./Settings.vue')));
 
 Vue.use(Router);
 
@@ -30,13 +31,20 @@ export default new Router({
     {
       path: '/(index.html)?',
       name: 'home',
-      component: Home
+      component: Home,
+      meta: {title: '主页'}
     },
     {
       path: '/register',
       name: 'register',
       component: Register,
-      meta: {requiresNoLogin: true}
+      meta: {title: '注册', requiresNoLogin: true}
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: Settings,
+      meta: {title: '设置', requiresLogin: true}
     },
     {
       path: '/404',

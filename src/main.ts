@@ -43,6 +43,10 @@ let app = new Vue({
       if (!checkRouter(this.$store.state.route))
         router.push('/');
     });
+    this.$store.dispatch('auth/authenticate').catch(error => {
+      if (!error.message.includes('Could not find stored JWT'))
+        this.$store.commit('snackbarAddMessage', error.message);
+    });
   },
   mixins: [App]
 });
