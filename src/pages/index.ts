@@ -5,6 +5,7 @@ import store from '@/store';
 let Home = resolve => (<any>require).ensure(['./Home.vue'], () => resolve(require('./Home.vue')));
 let Register = resolve => (<any>require).ensure(['./Register.vue'], () => resolve(require('./Register.vue')));
 let NotFound = resolve => (<any>require).ensure(['./NotFound.vue'], () => resolve(require('./NotFound.vue')));
+let Markdown = resolve => (<any>require).ensure(['./Markdown.vue'], () => resolve(require('./Markdown.vue')));
 let Settings = resolve => (<any>require).ensure(['./Settings.vue'], () => resolve(require('./Settings.vue')));
 
 Vue.use(Router);
@@ -50,6 +51,11 @@ export default new Router({
       path: '/404',
       name: 'notFound',
       component: NotFound
+    },
+    {
+      path: '/markdown',
+      name: 'markdownTest',
+      component: Markdown
     },
     {
       path: '*',

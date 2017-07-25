@@ -110,6 +110,10 @@ module.exports = {
           name: 'static/fonts/[name].[hash:7].[ext]'
         }
       },
+      {
+        test: /\.txt$/,
+        use: 'raw-loader'
+      },
       ...styleLoaders
     ]
   },
