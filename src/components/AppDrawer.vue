@@ -27,7 +27,7 @@
           <v-list-tile-title>主页</v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
-      <v-list-tile exact to="/register">
+      <v-list-tile exact to="/register" v-if="!user">
         <v-list-tile-action>
           <v-icon>account_circle</v-icon>
         </v-list-tile-action>
@@ -35,6 +35,15 @@
           <v-list-tile-title>注册</v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
+      <v-list-tile exact to="/settings" v-else>
+        <v-list-tile-action>
+          <v-icon>account_circle</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-content>
+          <v-list-tile-title>设置</v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
+
     </v-list>
   </v-navigation-drawer>
 </template>
