@@ -1,10 +1,12 @@
 <template>
-  <v-container
-    flex class="markdown-body"
-    :class="{'github-markdown': true}"
-    ref="content"
-    v-html="content">
-  </v-container>
+  <v-layout row justify-space-around>
+    <div
+      flex class="markdown-body"
+      :class="{'github-markdown': true}"
+      ref="content"
+      v-html="content">
+    </div>
+  </v-layout>
 </template>
 
 <script>
@@ -13,7 +15,7 @@
   import hljs from 'highlight.js';
 
   emojify.setConfig({
-    mode: 'sprite'
+    mode: 'data-uri'
   });
 
   export default {
@@ -38,7 +40,7 @@
         renderer.heading = function (text, level) {
           let escapedText = text.toLowerCase().replace(/[^\w]+/g, '-');
 
-          return `<h${level}><a name="${escapedText}" class="header-link" onclick="handleLinkClick(event);" href="#${escapedText}"></a>${text}</h${level}>`;
+          return `<h${level}><a name="${escapedText}" class="header-link hidden-xs-only" onclick="handleLinkClick(event);" href="#${escapedText}"></a>${text}</h${level}>`;
         };
         this.content = marked(body, { renderer: renderer });
       }
@@ -53,14 +55,23 @@
   };
 </script>
 
-<style lang="scss">
+<style lang="stylus">
   @import "../assets/styles/markdown-normal-style.scss";
-  @import '../assets/styles/github-markdown.scss';
-  @import '../assets/styles/jasonm23-dark-markdown.scss';
-  @import '../assets/styles/jasonm23-foghorn-markdown.scss';
+  @import "../assets/styles/github-markdown.scss";
+  @import "../assets/styles/jasonm23-dark-markdown.scss";
+  @import "../assets/styles/jasonm23-foghorn-markdown.scss";
+  @import "../assets/styles/jasonm23-markdown.scss";
+  @import "~vuetify/src/stylus/settings/_variables.styl"
 
   .markdown-body {
     max-width: 920px;
-    padding-left: 35px;
+    .MJXc-display {
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+    padding: 0 30px;
+    @media $display-breakpoints.xs-only {
+      padding: 0 0;
+    }
   }
 </style>
