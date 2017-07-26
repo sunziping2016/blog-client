@@ -4,17 +4,15 @@
     <app-drawer></app-drawer>
     <app-header ref="header"></app-header>
     <main>
-      <v-container fluid>
-        <transition
-          appear name="slide-y" mode="out-in"
-          @before-leave="beforeLeave"
-          @before-enter="beforeEnter"
-        >
-          <keep-alive include="register">
-            <router-view></router-view>
-          </keep-alive>
-        </transition>
-      </v-container>
+      <transition
+        appear name="slide-y" mode="out-in"
+        @before-leave="beforeLeave"
+        @before-enter="beforeEnter"
+      >
+        <keep-alive include="register">
+          <router-view></router-view>
+        </keep-alive>
+      </transition>
     </main>
     <app-snackbar></app-snackbar>
   </v-app>
@@ -86,4 +84,11 @@
     &-enter, &-leave-to
       opacity 0
       transform translateY(40px)
+
+  .application
+    height 100%
+
+  main
+    min-height 100%
+    height 100%
 </style>

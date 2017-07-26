@@ -1,7 +1,9 @@
 <template>
-  <v-layout row justify-space-around>
-    <markdown-viewer :content="content"></markdown-viewer>
-  </v-layout>
+  <v-container fluid>
+    <v-layout row justify-space-around>
+      <markdown-viewer :content="content"></markdown-viewer>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>

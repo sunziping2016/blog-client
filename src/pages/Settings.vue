@@ -1,37 +1,39 @@
 <template>
-  <v-layout row justify-space-around>
-    <v-card class="settings-panel elevation-1">
-      <v-card-title class="headline">账户</v-card-title>
-      <v-card-text>
-        <v-container fluid>
-          <v-layout row>
-            <v-flex xs4>
-              <v-subheader>头像</v-subheader>
-            </v-flex>
-            <v-flex xs8>
-              <v-text-field></v-text-field>
-            </v-flex>
-          </v-layout>
-          <v-layout row>
-            <v-flex xs4>
-              <v-subheader>昵称</v-subheader>
-            </v-flex>
-            <v-flex xs8>
-              <v-text-field></v-text-field>
-            </v-flex>
-          </v-layout>
-          <v-layout row>
-            <v-flex xs4>
-              <v-subheader>邮箱</v-subheader>
-            </v-flex>
-            <v-flex xs8>
-              <v-text-field></v-text-field>
-            </v-flex>
-          </v-layout>
-        </v-container>
-      </v-card-text>
-    </v-card>
-  </v-layout>
+  <v-container fluid>
+    <v-layout row justify-space-around>
+      <v-card class="settings-panel elevation-1">
+        <v-card-title class="headline">账户</v-card-title>
+        <v-card-text>
+          <v-container fluid>
+            <v-layout row>
+              <v-flex xs4>
+                <v-subheader>头像</v-subheader>
+              </v-flex>
+              <v-flex xs8>
+                <v-text-field></v-text-field>
+              </v-flex>
+            </v-layout>
+            <v-layout row>
+              <v-flex xs4>
+                <v-subheader>昵称</v-subheader>
+              </v-flex>
+              <v-flex xs8>
+                <v-text-field></v-text-field>
+              </v-flex>
+            </v-layout>
+            <v-layout row>
+              <v-flex xs4>
+                <v-subheader>邮箱</v-subheader>
+              </v-flex>
+              <v-flex xs8>
+                <v-text-field></v-text-field>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>

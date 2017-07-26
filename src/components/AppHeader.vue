@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar fixed dark class="primary">
+  <v-toolbar fixed dark class="primary app-header">
     <v-toolbar-side-icon @click.native.stop="$store.commit('drawerSet', !$store.state.appshell.drawer)">
     </v-toolbar-side-icon>
     <v-toolbar-title class="white--text">Title</v-toolbar-title>
@@ -17,6 +17,7 @@
   export default {};
 </script>
 
-<style lang="stylus" scoped>
-
+<style lang="stylus">
+  .app-header .toolbar__content
+    height: 64px!important;
 </style>

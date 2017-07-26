@@ -1,6 +1,6 @@
 <template>
   <div
-    flex class="markdown-body"
+    class="markdown-body"
     :class="markdownStyle"
     ref="content"
     v-html="markedContent">

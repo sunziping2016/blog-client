@@ -6,6 +6,7 @@ let Home = resolve => (<any>require).ensure(['./Home.vue'], () => resolve(requir
 let Register = resolve => (<any>require).ensure(['./Register.vue'], () => resolve(require('./Register.vue')));
 let NotFound = resolve => (<any>require).ensure(['./NotFound.vue'], () => resolve(require('./NotFound.vue')));
 let Markdown = resolve => (<any>require).ensure(['./Markdown.vue'], () => resolve(require('./Markdown.vue')));
+let Editor = resolve => (<any>require).ensure(['./Editor.vue'], () => resolve(require('./Editor.vue')));
 let Settings = resolve => (<any>require).ensure(['./Settings.vue'], () => resolve(require('./Settings.vue')));
 
 Vue.use(Router);
@@ -41,6 +42,12 @@ let router = new Router({
       name: 'markdownTest',
       component: Markdown,
       meta: {title: '文章', hashOffset: true}
+    },
+    {
+      path: '/edit',
+      name: 'editorTest',
+      component: Editor,
+      meta: {title: '编辑', hashOffset: true}
     },
     {
       path: '*',

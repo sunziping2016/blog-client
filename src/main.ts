@@ -10,12 +10,14 @@ import store from './store';
 import { sync } from 'vuex-router-sync';
 import Dropzone from 'vue2-dropzone';
 import feathersClient from './feathers';
+import VueCodeMirror from 'vue-codemirror';
 
 FastClick.attach(document.body);
 sync(store, router);
 Vue.use(Vuetify);
 Vue.component('icon', Icon);
 Vue.component('dropzone', Dropzone);
+Vue.use(VueCodeMirror);
 Object.keys(components).forEach(x => Vue.component(x, components[x]));
 
 let app = new Vue(<any>{
