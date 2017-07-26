@@ -95,6 +95,9 @@
           this.$store.commit('loginDialogSet', true);
         }
       }
+    },
+    mounted() {
+      this.drawer = window.innerWidth > 1024;
     }
   }
 </script>

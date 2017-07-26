@@ -70,6 +70,14 @@ let webpackConfig = merge(baseWebpackConfig, {
       stripPrefix: 'dist/',
       minify: true,
       runtimeCaching: [
+        {
+          urlPattern: /^https?:\/\/cdn\.bootcss\.com\//,
+          handler: 'cacheFirst'
+        },
+        {
+          urlPattern: /^https?:\/\/fonts\.googleapis\.com\//,
+          handler: 'cacheFirst'
+        }
       ]
     }),
     new SwRegisterWebpackPlugin({

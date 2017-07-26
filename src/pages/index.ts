@@ -51,20 +51,20 @@ let router = new Router({
 });
 
 function scrollBehavior(to, from, savedPosition) {
-  let rootEqual = to.matched[0].components === from.matched[0].components, position = savedPosition;
-  if (!position) {
-    position = {};
-    if (to.hash) {
-      position.selector = `a[name="${to.hash.slice(1)}"]`;
-      if (to.meta.hashOffset) {
-        position.offset = {
-          x: 0,
-          y: (<any>router.app.$refs.header).$el.clientHeight,
-        }
+  let rootEqual = to.matched[0].components === from.matched[0].components, position: any = {};
+  if (to.hash) {
+    position.selector = `a[name="${to.hash.slice(1)}"]`;
+    if (to.meta.hashOffset) {
+      position.offset = {
+        x: 0,
+        y: (<any>router.app.$refs.header).$el.clientHeight,
       }
     }
   }
-  console.log(rootEqual, position);
+  if (savedPosition) {
+    position.x = savedPosition.x;
+    position.y = savedPosition.y;
+  }
   if (rootEqual)
     return position;
   store.commit('addSavedPosition', {
