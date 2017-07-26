@@ -37,7 +37,7 @@
     "vue-awesome": "^2.3.1",
     "vue-dropzone": "^1.0.4",
     "vue-monaco-editor": "0.0.19",
-    "vue-router": "^2.6.0",
+    "vue-router": "git+ssh://git@github.com/sunziping2016/vue-router.git#dev",
     "vue2-dropzone": "^2.3.4",
     "vuetify": "^0.13.1",
     "vuex": "^2.3.1",

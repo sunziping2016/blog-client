@@ -3,7 +3,7 @@
     persistent light enable-resize-watcher
     :mini-variant.sync="mini" v-model="drawer" overflow>
     <v-list three-line>
-      <v-list-tile avatar tag="div" @click.native.stop="onUserClick">
+      <v-list-tile avatar tag="div" @click.native.stop="onUserClick" class="clickable">
         <v-list-tile-avatar>
           <img v-if="user && user.avatar" :src="user.avatar">
           <icon v-else name="user-circle-o" scale="2"></icon>
@@ -20,7 +20,7 @@
     </v-list>
     <v-list>
       <v-divider></v-divider>
-      <v-list-tile exact to="/">
+      <v-list-tile exact to="/" @click.native.stop>
         <v-list-tile-action>
           <v-icon>home</v-icon>
         </v-list-tile-action>
@@ -28,7 +28,7 @@
           <v-list-tile-title>主页</v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
-      <v-list-tile exact to="/register" v-if="!user">
+      <v-list-tile exact to="/register" v-if="!user" @click.native.stop>
         <v-list-tile-action>
           <v-icon>account_circle</v-icon>
         </v-list-tile-action>
@@ -36,12 +36,20 @@
           <v-list-tile-title>注册</v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
-      <v-list-tile exact to="/settings" v-else>
+      <v-list-tile exact to="/settings" v-else @click.native.stop>
         <v-list-tile-action>
           <v-icon>account_circle</v-icon>
         </v-list-tile-action>
         <v-list-tile-content>
           <v-list-tile-title>设置</v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
+      <v-list-tile exact to="/markdown" @click.native.stop>
+        <v-list-tile-action>
+          <v-icon>book</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-content>
+          <v-list-tile-title>测试</v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
 
@@ -94,4 +102,9 @@
 <style lang="stylus">
   .avatar .fa-icon
     color rgba(0,0,0,0.54)!important
+</style>
+
+<style lang="stylus">
+  .clickable
+    cursor pointer
 </style>

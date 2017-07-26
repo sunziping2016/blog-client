@@ -18,7 +18,7 @@ Vue.component('icon', Icon);
 Vue.component('dropzone', Dropzone);
 Object.keys(components).forEach(x => Vue.component(x, components[x]));
 
-let app = new Vue({
+let app = new Vue(<any>{
   router,
   store,
   data: {
@@ -87,3 +87,12 @@ router.afterEach((to, from) => {
 router.onReady(() => app.$mount('#app'));
 (<any>window).feathersClient = feathersClient;
 (<any>window).app = app;
+
+(<any>window).handleLinkClick = function(event) {
+  event.preventDefault();
+  if (event.target.href.startsWith(location.origin)) {
+    router.push(event.target.href.slice(location.origin.length));
+    console.log(event.target.href.slice(location.origin.length))
+  } else
+    router.push(event.target.href);
+};

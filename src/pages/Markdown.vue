@@ -1,7 +1,7 @@
 <template>
   <v-container
     flex class="markdown-body"
-    :class="{'jasonm23-dark-markdown': true}"
+    :class="{'github-markdown': true}"
     :id="id"
     v-html="content">
   </v-container>
@@ -34,12 +34,7 @@
         renderer.heading = function (text, level) {
           let escapedText = text.toLowerCase().replace(/[^\w]+/g, '-');
 
-          return '<h' + level + '><a name="' +
-            escapedText +
-            '" class="header-link" href="#' +
-            escapedText +
-            '"></a>' +
-            text + '</h' + level + '>';
+          return `<h${level}><a name="${escapedText}" class="header-link" onclick="handleLinkClick(event);" href="#${escapedText}"></a>${text}</h${level}>`;
         };
         this.content = marked(body, { renderer: renderer });
 

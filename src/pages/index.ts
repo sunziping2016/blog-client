@@ -10,23 +10,7 @@ let Settings = resolve => (<any>require).ensure(['./Settings.vue'], () => resolv
 
 Vue.use(Router);
 
-function scrollBehavior(to, from, savedPosition) {
-  let rootEqual = to.matched[0].components === from.matched[0].components, position = savedPosition;
-  if (!position) {
-    position = {};
-    if (to.hash)
-      position.selector = to.hash;
-  }
-  if (rootEqual)
-    return position;
-  store.commit('addSavedPosition', {
-    path: to.fullPath,
-    position
-  });
-  return false;
-}
-
-export default new Router({
+let router = new Router({
   mode: 'history',
   routes: [
     {
@@ -55,7 +39,8 @@ export default new Router({
     {
       path: '/markdown',
       name: 'markdownTest',
-      component: Markdown
+      component: Markdown,
+      meta: {title: '文章', hashOffset: true}
     },
     {
       path: '*',
@@ -65,3 +50,28 @@ export default new Router({
   scrollBehavior
 });
 
+function scrollBehavior(to, from, savedPosition) {
+  let rootEqual = to.matched[0].components === from.matched[0].components, position = savedPosition;
+  if (!position) {
+    position = {};
+    if (to.hash) {
+      position.selector = `a[name="${to.hash.slice(1)}"]`;
+      if (to.meta.hashOffset) {
+        position.offset = {
+          x: 0,
+          y: (<any>router.app.$refs.header).$el.clientHeight,
+        }
+      }
+    }
+  }
+  console.log(rootEqual, position);
+  if (rootEqual)
+    return position;
+  store.commit('addSavedPosition', {
+    path: to.fullPath,
+    position
+  });
+  return false;
+}
+
+export default router;

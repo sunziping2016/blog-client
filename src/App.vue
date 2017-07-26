@@ -2,7 +2,7 @@
   <v-app id="app">
     <login-dialog></login-dialog>
     <app-drawer></app-drawer>
-    <app-header></app-header>
+    <app-header ref="header"></app-header>
     <main>
       <v-container fluid>
         <transition
@@ -44,11 +44,11 @@
       beforeEnter() {
         this.$nextTick(() => {
           window.removeEventListener('scroll', this.resetScroll);
-          this.scrollTo(this.positions[this.$route.fullPath]);
+          this.scrollTo(this.positions[this.$route.fullPath], this.$route.meta.hashOffset);
           this.$store.commit('clearSavedPosition');
         })
       },
-      scrollTo(pos) {
+      scrollTo(pos, hashOffset) {
         if (!pos)
           return;
         if (pos.selector) {
