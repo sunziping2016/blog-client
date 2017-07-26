@@ -2,7 +2,7 @@
   <v-container
     flex class="markdown-body"
     :class="{'github-markdown': true}"
-    :id="id"
+    ref="content"
     v-html="content">
   </v-container>
 </template>
@@ -11,6 +11,10 @@
   import body from './hello.txt';
   import marked from 'marked';
   import hljs from 'highlight.js';
+
+  emojify.setConfig({
+    mode: 'sprite'
+  });
 
   export default {
     data: () => ({
@@ -37,14 +41,14 @@
           return `<h${level}><a name="${escapedText}" class="header-link" onclick="handleLinkClick(event);" href="#${escapedText}"></a>${text}</h${level}>`;
         };
         this.content = marked(body, { renderer: renderer });
-
       }
     },
     created() {
       this.updateContent();
     },
     mounted() {
-      this.$nextTick(() => MathJax.Hub.Queue(["Typeset",MathJax.Hub,this.id]));
+      emojify.run(this.$refs.content);
+      MathJax.Hub.Queue(["Typeset",MathJax.Hub, this.$refs.content]);
     }
   };
 </script>

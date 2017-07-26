@@ -2,6 +2,13 @@
 
 In the mathematical $\sqrt{2}$ theory of [directed graphs](http://en.wikipedia.org/wiki/Directed_graph), a graph is said to be **strongly connected** if every vertex is [reachable](http://en.wikipedia.org/wiki/Reachable) from every other vertex. The **strongly connected components** of an arbitrary directed graph form a [partition](http://en.wikipedia.org/wiki/Partition) into subgraphs that are themselves strongly connected. It is possible to test the strong connectivity of a graph, or to find its strongly connected components, in [linear time](http://en.wikipedia.org/wiki/Linear_time).
 
+$$ \frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} =
+1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}}
+{1+\frac{e^{-8\pi}} {1+\ldots} } } } $$
+
+:smile:
+
+$$ \nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} = \frac{4\pi}{c}\vec{\mathbf{j}}  \nabla \cdot \vec{\mathbf{E}} = 4 \pi \rho$$
 
 ## Definitions
 
