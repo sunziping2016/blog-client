@@ -15,7 +15,7 @@
 
 <script>
   import body from './hello.txt';
-  import debounce from 'lodash.debounce'
+  import debounce from 'lodash/debounce.js'
 
   // Similarly, you can also introduce the resource pack you want to use within the component
   // require('codemirror/some-resource')

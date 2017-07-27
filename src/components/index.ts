@@ -4,6 +4,7 @@ import AppDrawer from './AppDrawer.vue';
 import LoginDialog from './LoginDialog.vue';
 import MarkdownViewer from './MarkdownViewer.vue';
 import CodeMirror from './CodeMirror.vue';
+import Dropzone from './Dropzone.vue';
 
 export default {
   'app-header': AppHeader,
@@ -12,4 +13,5 @@ export default {
   'login-dialog': LoginDialog,
   'markdown-viewer': MarkdownViewer,
   'codemirror': CodeMirror,
+  'dropzone': Dropzone
 };

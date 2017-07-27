@@ -47,7 +47,7 @@ let router = new Router({
       path: '/edit',
       name: 'editorTest',
       component: Editor,
-      meta: {title: '编辑', hashOffset: true}
+      meta: {title: '编辑', hashOffset: true, fixedHeight: true}
     },
     {
       path: '*',
