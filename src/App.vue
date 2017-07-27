@@ -1,5 +1,5 @@
 <template>
-  <v-app id="app">
+  <v-app id="app" :class="{'fixed-height': $route.meta.fixedHeight}">
     <login-dialog></login-dialog>
     <app-drawer></app-drawer>
     <app-header ref="header"></app-header>
@@ -85,10 +85,10 @@
       opacity 0
       transform translateY(40px)
 
-  .application
+  .fixed-height
     height 100%
+    main
+      min-height 100%
+      height 100%
 
-  main
-    min-height 100%
-    height 100%
 </style>
