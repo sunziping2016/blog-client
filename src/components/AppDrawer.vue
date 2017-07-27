@@ -105,9 +105,13 @@
 <style lang="stylus">
   .avatar .fa-icon
     color rgba(0,0,0,0.54)!important
-</style>
-
-<style lang="stylus">
+  @media (max-width: 1424px) and (orientation: landscape)
+    .navigation-drawer--mini-variant {
+      margin-top: 64px!important;
+      max-height: calc(100vh - 64px)!important;
+    }
   .clickable
     cursor pointer
+  .navigation-drawer
+    z-index 5!important
 </style>

@@ -19,5 +19,7 @@
 
 <style lang="stylus">
   .app-header .toolbar__content
-    height: 64px!important;
+    height 64px!important;
+  nav.toolbar--fixed
+    z-index 4
 </style>

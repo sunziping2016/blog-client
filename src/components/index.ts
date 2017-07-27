@@ -3,7 +3,7 @@ import AppSnackbar from  './AppSnackbar.vue';
 import AppDrawer from './AppDrawer.vue';
 import LoginDialog from './LoginDialog.vue';
 import MarkdownViewer from './MarkdownViewer.vue';
-import MarkdownEditor from './MarkdownEditor.vue';
+import CodeMirror from './CodeMirror.vue';
 
 export default {
   'app-header': AppHeader,
@@ -11,5 +11,5 @@ export default {
   'app-drawer': AppDrawer,
   'login-dialog': LoginDialog,
   'markdown-viewer': MarkdownViewer,
-  'markdown-editor' : MarkdownEditor
+  'codemirror': CodeMirror,
 };

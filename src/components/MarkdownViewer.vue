@@ -9,10 +9,9 @@
 
 <script>
   import marked from 'marked';
-  import hljs from 'highlight.js';
-
   emojify.setConfig({
-    mode: 'data-uri',
+    mode: 'img',
+    img_dir: '//cdn.bootcss.com/emojify.js/1.1.0/images/basic',
     ignore_emoticons: true
   });
 
@@ -23,8 +22,10 @@
         required: true
       },
       config: {
-        default: {
-          setSrcDirectory: (originalSrc) => {originalSrc}
+        default() {
+          return {
+            setSrcDirectory: originalSrc => originalSrc
+          };
         }
       },
       mdStyle: {
@@ -99,9 +100,10 @@
       overflow-x: auto;
       overflow-y: hidden;
     }
-    padding: 0 30px;
+    padding: 30px
+    min-height: 100%;
     @media $display-breakpoints.xs-only {
-      padding: 0 0;
+      padding: 30px 0;
     }
   }
 </style>

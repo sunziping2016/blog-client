@@ -2,7 +2,7 @@
   <div class="editor-container">
     <div>
       <codemirror ref="myEditor"
-                  :code="code"
+                  :value="code"
                   :options="editorOptions"
                   @change="onEditorCodeChange">
       </codemirror>
