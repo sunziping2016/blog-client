@@ -106,6 +106,5 @@
 </script>
 
 <style lang="stylus">
-  .CodeMirror-vscrollbar
-    z-index 3
+
 </style>

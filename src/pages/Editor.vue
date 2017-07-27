@@ -1,14 +1,58 @@
 <template>
-  <div class="editor-container">
-    <div>
-      <codemirror ref="myEditor"
-                  v-model="code"
-                  :options="editorOptions">
-      </codemirror>
+  <div class="edit-page">
+    <div class="editor-viewer">
+      <div>
+        <codemirror ref="myEditor"
+                    v-model="code"
+                    :options="editorOptions">
+        </codemirror>
+      </div>
+      <div v-if="preview">
+        <markdown-viewer :content="renderedCode" :config="viewerConfiguer"></markdown-viewer>
+      </div>
     </div>
-    <div v-if="true">
-      <markdown-viewer :content="renderedCode" :config="viewerConfiguer"></markdown-viewer>
-    </div>
+    <!--<v-btn fab dark primary class="editor-config-button">-->
+      <!--<v-icon dark>list</v-icon>-->
+    <!--</v-btn>-->
+    <v-card class="editor-config">
+      <v-speed-dial
+        v-model="menuButtonClicked"
+        :right="true"
+        :bottom="true"
+        transition="slide-y-reverse-transition"
+      >
+        <v-btn
+          slot="activator"
+          class="blue darken-2"
+          dark
+          fab
+          hover
+          v-model="menuButtonClicked"
+        >
+          <v-icon>list</v-icon>
+          <v-icon>close</v-icon>
+        </v-btn>
+        <v-btn
+          fab
+          dark
+          small
+          class="indigo"
+          @click.native="previewButtonClick"
+          v-model="preview"
+        >
+          <v-icon>visibility</v-icon>
+          <v-icon>visibility_off</v-icon>
+        </v-btn>
+        <v-btn
+          fab
+          dark
+          small
+          class="red"
+        >
+          <v-icon>delete</v-icon>
+        </v-btn>
+      </v-speed-dial>
+    </v-card>
   </div>
 </template>
 
@@ -39,7 +83,9 @@
         },
         viewerConfiguer: {
           setSrcDirectory: originalSrc => 'hhh/' + originalSrc
-        }
+        },
+        menuButtonClicked: false,
+        preview: true
       }
     },
     watch: {
@@ -53,26 +99,41 @@
         return this.$refs.myEditor.editor
       }
     },
+    methods: {
+      previewButtonClick(){
+        this.preview = !this.preview;
+      }
+    }
   }
 </script>
 
 <style lang="stylus">
   @import "~vuetify/src/stylus/settings/_variables.styl"
 
-  .editor-container
+  .edit-page
+    height:100%
+    .editor-config
+      box-shadow none
+      background-color transparent
+      position absolute
+      bottom 20px
+      right 20px
+      z-index 1
+      .btn--floating .icon
+        left auto
+        top auto
+
+  .editor-viewer
     display flex
     height 100%
     & > div
-      width 50%
       height 100%
       overflow-y auto
+      z-index 0
     .CodeMirror
       height 100%
-
-    .markdown-body {
+    .markdown-body
       padding: 20px 30px
-      @media $display-breakpoints.xs-only {
-        padding: 20px;
-      }
-    }
+      @media $display-breakpoints.xs-only
+        padding: 20px
 </style>
