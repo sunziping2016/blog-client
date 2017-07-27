@@ -12,7 +12,8 @@
   import hljs from 'highlight.js';
 
   emojify.setConfig({
-    mode: 'data-uri'
+    mode: 'data-uri',
+    ignore_emoticons: true
   });
 
   export default {
@@ -21,14 +22,19 @@
         type: String,
         required: true
       },
+      config: {
+        default: {
+          setSrcDirectory: (originalSrc) => {originalSrc}
+        }
+      },
       mdStyle: {
         type: String,
         default: 'github-markdown'
-      }
+      },
     },
     computed: {
       markdownStyle: function () {
-        return { [this.mdStyle]: true }
+        return { [this.mdStyle]: true}
       },
       markedContent: function () {
         function escape(html, encode) {
@@ -48,6 +54,18 @@
 
           return `<h${level}><a name="${escapedText}" class="header-link hidden-xs-only" onclick="handleLinkClick(event);" href="#${escapedText}"></a>${text}</h${level}>`;
         };
+        let self = this;
+        renderer.image = function(href, title, text) {
+          console.log(href);
+          if(!(href.startsWith('http') || href.startsWith('/')))
+            href = self.config.setSrcDirectory(href);
+          let out = '<img src="' + href + '" alt="' + text + '"';
+          if (title) {
+            out += ' title="' + title + '"';
+          }
+          out += this.options.xhtml ? '/>' : '>';
+          return out;
+        };
         return marked(this.content, { renderer: renderer });
       }
     },
@@ -59,7 +77,7 @@
     },
     watch: {
       markedContent() {
-        this.postRender();
+        this.$nextTick(() => this.postRender());
       }
     },
     mounted() {
