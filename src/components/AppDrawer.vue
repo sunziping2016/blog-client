@@ -52,7 +52,14 @@
           <v-list-tile-title>测试</v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
-
+      <v-list-tile exact to="/edit" @click.native.edit>
+        <v-list-tile-action>
+          <v-icon>edit</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-content>
+          <v-list-tile-title>编辑</v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
     </v-list>
   </v-navigation-drawer>
 </template>

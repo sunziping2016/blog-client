@@ -1,19 +1,19 @@
 <template>
   <div class="edit-page">
-    <div class="editor-viewer">
-      <div>
+    <div class="editor-viewer"
+         :class="{'hasno-preview': !preview}">
+      <div class="editor-panel">
         <codemirror ref="myEditor"
                     v-model="code"
                     :options="editorOptions">
         </codemirror>
       </div>
-      <div v-if="preview">
-        <markdown-viewer :content="renderedCode" :config="viewerConfiguer"></markdown-viewer>
-      </div>
+      <transition duration="300">
+        <div class="viewer-panel" v-if="preview">
+            <markdown-viewer :content="renderedCode" :config="viewerConfiguer"></markdown-viewer>
+        </div>
+      </transition>
     </div>
-    <!--<v-btn fab dark primary class="editor-config-button">-->
-      <!--<v-icon dark>list</v-icon>-->
-    <!--</v-btn>-->
     <v-card class="editor-config">
       <v-speed-dial
         v-model="menuButtonClicked"
@@ -85,7 +85,7 @@
           setSrcDirectory: originalSrc => 'hhh/' + originalSrc
         },
         menuButtonClicked: false,
-        preview: true
+        preview: !matchMedia('only screen and (max-width: 599px)').matches
       }
     },
     watch: {
@@ -124,13 +124,27 @@
         top auto
 
   .editor-viewer
-    display flex
+    white-space nowrap
     height 100%
-    & > div
-      height 100%
+    .editor-panel, .viewer-panel
+      white-space normal
       overflow-y auto
-      z-index 0
+      width 50%
+      height 100%
+      margin -2px
+      display inline-block
+      @media $display-breakpoints.xs-only
+        width 100%
+    .editor-panel
+      transition all 0.3s ease
+      @media $display-breakpoints.xs-only
+        margin-left -100%
+    &.hasno-preview
+      .editor-panel
+        width 100%
+        margin-left 0
     .CodeMirror
+      z-index 0
       height 100%
     .markdown-body
       padding: 20px 30px
