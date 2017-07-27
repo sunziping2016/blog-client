@@ -1,5 +1,5 @@
 <template>
-  <textarea></textarea>
+  <textarea :value="value"></textarea>
 </template>
 
 <script>
@@ -22,67 +22,9 @@
         required: true
       },
     },
-    created: function() {
-      if (this.options.lineNumbers === undefined) {
-        this.options.lineNumbers = true;
-      }
-      if (this.options.lineWrapping === undefined) {
-        this.options.lineWrapping = false;
-      }
-      if (this.options.mode === undefined) {
-        this.options.mode = 'text/javascript';
-      }
-
-      let theme = this.options.theme;
-      let language = this.options.mode;
-      let isCustomMode = !!CodeMirror.modes[language];
-
-      // language string config
-      if (typeof language === 'string') {
-        let lang = CodeMirror.findModeByMIME(language);
-        language = !lang ? lang : lang.mode
-        // language object config
-      } else if (typeof language === 'object') {
-        if (language.name) {
-          let lang = CodeMirror.findModeByName(language.name);
-          if (lang) {
-            language = lang.mode
-          } else {
-            language = null
-          }
-        } else if (language.ext) {
-          let lang = CodeMirror.findModeByExtension(language.ext);
-          if (lang) {
-            language = lang.mode
-          } else {
-            language = null
-          }
-        } else if (language.mime) {
-          let lang = CodeMirror.findModeByMIME(language.mime);
-          if (lang) {
-            language = lang.mode
-          } else {
-            language = null
-          }
-        } else if (language.filename) {
-          let lang = CodeMirror.findModeByFileName(language.filename);
-          if (lang) {
-            language = lang.mode
-            // this.options.mode = language
-          } else {
-            language = null
-          }
-        }
-      }
-
-      if ((!language || language === 'null') && !isCustomMode) {
-        console.warn('CodeMirror language mode: ' + language + ' configuration error (CodeMirror语言模式配置错误，或者不支持此语言) See http://codemirror.net/mode/ for more details.')
-      }
-    },
     mounted: function() {
       const _this = this;
       this.editor = CodeMirror.fromTextArea(this.$el, this.options);
-      this.editor.setValue(this.value);
       this.editor.on('change', function(cm) {
         let content = cm.getValue();
         if (!!_this.$emit) {

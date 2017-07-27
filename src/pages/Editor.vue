@@ -2,12 +2,11 @@
   <div class="editor-container">
     <div>
       <codemirror ref="myEditor"
-                  :value="code"
-                  :options="editorOptions"
-                  @change="onEditorCodeChange">
+                  v-model="code"
+                  :options="editorOptions">
       </codemirror>
     </div>
-    <div>
+    <div v-if="true">
       <markdown-viewer :content="renderedCode" :config="viewerConfiguer"></markdown-viewer>
     </div>
   </div>
@@ -31,7 +30,6 @@
           mode: 'text/x-markdown',
           lineNumbers: true,
           line: true,
-          keyMap: "basic",
           gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
           // 选中文本自动高亮，及高亮方式
           styleSelectedText: true,
@@ -44,15 +42,9 @@
         }
       }
     },
-    methods: {
-      onEditorCodeChange(newCode) {
-        console.log('before change');
-        this.code = newCode;
-        this.updateCode();
-      },
-      updateCode: debounce(
+    watch: {
+      code: debounce(
         function () {
-          console.log('debounce');
           this.renderedCode = this.code;
         }, 500)
     },
@@ -65,6 +57,8 @@
 </script>
 
 <style lang="stylus">
+  @import "~vuetify/src/stylus/settings/_variables.styl"
+
   .editor-container
     display flex
     height 100%
@@ -74,4 +68,11 @@
       overflow-y auto
     .CodeMirror
       height 100%
+
+    .markdown-body {
+      padding: 20px 30px
+      @media $display-breakpoints.xs-only {
+        padding: 20px;
+      }
+    }
 </style>

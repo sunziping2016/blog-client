@@ -57,7 +57,6 @@
         };
         let self = this;
         renderer.image = function(href, title, text) {
-          console.log(href);
           if(!(href.startsWith('http') || href.startsWith('/')))
             href = self.config.setSrcDirectory(href);
           let out = '<img src="' + href + '" alt="' + text + '"';
@@ -100,10 +99,10 @@
       overflow-x: auto;
       overflow-y: hidden;
     }
-    padding: 30px
+    padding: 0 30px
     min-height: 100%;
     @media $display-breakpoints.xs-only {
-      padding: 30px 0;
+      padding: 0;
     }
   }
 </style>
